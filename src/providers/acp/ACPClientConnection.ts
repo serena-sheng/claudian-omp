@@ -83,6 +83,12 @@ export interface ACPClientConnectionOptions {
   clientCapabilities?: Partial<ACPClientCapabilities>;
   clientInfo?: ACPImplementation | null;
   delegate?: ACPClientConnectionDelegate;
+  /**
+   * Per-provider wire-name overrides for logical ACP methods (e.g. agents that
+   * implement session resume as `session/resume` instead of `session/load`).
+   * Unmapped logical methods keep the shared defaults from {@link ACP_METHOD_NAMES}.
+   */
+  methodNameOverrides?: Partial<Record<ACPLogicalMethod, string>>;
   transport: ACPJSONRPCTransport;
 }
 
@@ -155,7 +161,10 @@ export class ACPClientConnection {
   }
 
   cancel(notification: ACPCancelNotification): void {
-    this.options.transport.notify(ACP_METHOD_NAMES.cancel, notification);
+    this.options.transport.notify(
+      this.options.methodNameOverrides?.cancel ?? ACP_METHOD_NAMES.cancel,
+      notification,
+    );
   }
 
   setMode(request: ACPSetSessionModeRequest): Promise<ACPSetSessionModeResponse> {
@@ -272,7 +281,8 @@ export class ACPClientConnection {
     params?: unknown,
     requestOptions?: JSONRPCRequestOptions,
   ): Promise<T> {
-    return this.options.transport.request<T>(ACP_METHOD_NAMES[logicalMethod], params, requestOptions);
+    const wireMethod = this.options.methodNameOverrides?.[logicalMethod] ?? ACP_METHOD_NAMES[logicalMethod];
+    return this.options.transport.request<T>(wireMethod, params, requestOptions);
   }
 }
 

@@ -440,6 +440,13 @@
         "desc": "Pi にのみ渡す環境変数。"
       }
     },
+    "dsh": {
+      "environment": {
+        "name": "DeepSeek Harness 環境変数",
+        "desc": "DeepSeek Harness にのみ渡す環境変数。認証するにはここに DEEPSEEK_API_KEY を設定してください。"
+      },
+      "cliNote": "Node.js が必要です。CLI のインストール: npm install -g @deepseek-ai/dsh"
+    },
     "grok": {
       "environment": {
         "name": "Grok Build 環境変数",

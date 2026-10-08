@@ -440,6 +440,13 @@
         "desc": "Umgebungsvariablen, die nur an Pi übergeben werden."
       }
     },
+    "dsh": {
+      "environment": {
+        "name": "DeepSeek-Harness-Umgebungsvariablen",
+        "desc": "Umgebungsvariablen, die nur an DeepSeek Harness übergeben werden. DEEPSEEK_API_KEY hier setzen, um sich zu authentifizieren."
+      },
+      "cliNote": "Erfordert Node.js. Installation der CLI: npm install -g @deepseek-ai/dsh."
+    },
     "grok": {
       "environment": {
         "name": "Grok-Build-Umgebungsvariablen",

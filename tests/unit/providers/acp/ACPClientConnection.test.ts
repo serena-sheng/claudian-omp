@@ -335,4 +335,15 @@ describe('ACPClientConnection', () => {
       expect(notifySpy).toHaveBeenCalledTimes(1);
     } finally { harness.connection.dispose(); harness.transport.dispose(); harness.close(); }
   });
+
+  it('honors a cancel wire-name override', async () => {
+    const harness = createConnectionHarness(transport => new ACPClientConnection({
+      methodNameOverrides: { cancel: 'session/abort' },
+      transport,
+    }));
+    try {
+      harness.connection.cancel({ sessionId: 'session-1' });
+      await expect(harness.nextOutbound()).resolves.toMatchObject({ method: 'session/abort', params: { sessionId: 'session-1' } });
+    } finally { harness.connection.dispose(); harness.transport.dispose(); harness.close(); }
+  });
 });

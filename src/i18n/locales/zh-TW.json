@@ -440,6 +440,13 @@
         "desc": "僅傳遞給 Pi 的環境變數。"
       }
     },
+    "dsh": {
+      "environment": {
+        "name": "DeepSeek Harness 環境變數",
+        "desc": "僅傳遞給 DeepSeek Harness 的環境變數。在此設定 DEEPSEEK_API_KEY 以完成驗證。"
+      },
+      "cliNote": "需要 Node.js。安裝 CLI：npm install -g @deepseek-ai/dsh。"
+    },
     "grok": {
       "environment": {
         "name": "Grok Build 環境變數",

@@ -440,6 +440,13 @@
         "desc": "Pi에만 전달되는 환경 변수입니다."
       }
     },
+    "dsh": {
+      "environment": {
+        "name": "DeepSeek Harness 환경 변수",
+        "desc": "DeepSeek Harness에만 전달되는 환경 변수입니다. 인증하려면 여기에 DEEPSEEK_API_KEY를 설정하세요."
+      },
+      "cliNote": "Node.js가 필요합니다. CLI 설치: npm install -g @deepseek-ai/dsh"
+    },
     "grok": {
       "environment": {
         "name": "Grok Build 환경 변수",
