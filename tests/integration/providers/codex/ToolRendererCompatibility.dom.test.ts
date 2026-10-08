@@ -548,7 +548,21 @@ it.each([false, true].flatMap(lateNative => ['text', 'thinking'].map(boundary =>
     (el as HTMLElement).createEl('p', { text: markdown });
   });
   const messagesEl = document.body.createDiv();
-  const plugin = { app: { vault: { adapter: {} } }, settings: { mediaFolder: '', showMessageTimestamps: false } } as any;
+  // Rendering an edit/apply_patch card schedules a delayed vault refresh
+  // (vaultFileChangeNotifications, 200ms). The callback outlives the test, so the
+  // stub vault has to answer it: under CI load it otherwise fired after teardown
+  // and threw `vault.getAbstractFileByPath is not a function`, failing whichever
+  // test happened to be running.
+  const plugin = {
+    app: {
+      vault: {
+        adapter: { list: async () => ({ files: [], folders: [] }) },
+        getAbstractFileByPath: () => null,
+        trigger: () => undefined,
+      },
+    },
+    settings: { mediaFolder: '', showMessageTimestamps: false },
+  } as any;
   const renderer = new MessageRenderer(plugin, new Component(), messagesEl);
   const state = new ChatState();
   const subagents = new SubagentManager(() => undefined);
