@@ -37,7 +37,7 @@ export function parseDshModelRouteValue(
     if (!Array.isArray(parsed) || parsed.length !== 2) {
       return null;
     }
-    const [route, model] = parsed;
+    const [route, model] = parsed as unknown[];
     if (typeof route !== 'string' || typeof model !== 'string' || !route || !model) {
       return null;
     }

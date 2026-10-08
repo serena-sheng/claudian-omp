@@ -1,5 +1,4 @@
 import type { SlashCommand } from '../../../core/types';
-
 import {
   ACPClientConnection,
   ACPJSONRPCTransport,

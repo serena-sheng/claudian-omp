@@ -3,13 +3,13 @@ import { getProviderConfig } from '../../core/providers/providerConfig';
 import { hasStoredConfigNormalization } from '../../core/providers/settings/storedSettings';
 import type { ProviderModule } from '../../core/providers/types';
 import {
-  getDshWorkspaceServices,
   dshWorkspaceRegistration,
+  getDshWorkspaceServices,
 } from './app/DshWorkspaceServices';
 import { DSH_PROVIDER_CAPABILITIES } from './capabilities';
+import { dshModelPolicy } from './DshModelPolicy';
 import { dshSettingsReconciler } from './env/DshSettingsReconciler';
 import { DshExecutionBackend } from './execution/DshExecutionBackend';
-import { dshModelPolicy } from './DshModelPolicy';
 import { DshConversationHistoryService } from './history/DshConversationHistoryService';
 import { getDshMigratedVisibleModelIds, getDshProviderSettings, getOrderedDshVisibleModelIds, projectDshModelSettings, updateDshProviderSettings } from './settings';
 import { dshChatUIConfig } from './ui/DshChatUIConfig';

@@ -207,13 +207,12 @@ it.each([false, true])('terminates on native exit after prompt settled: %s', asy
     }
     proc.kill();
     for (let i = 0; i < 10; i++) await new Promise(resolve => setImmediate(resolve));
-    if (settled) {
-      // A settled end_turn completes cleanly; killing the native afterwards does not
-      // manufacture a transport error.
-      expect(events.at(-1)).toMatchObject({ type: 'turn_completed' });
-    } else {
-      expect(events.at(-1)).toMatchObject({ type: 'execution_error', category: 'transport', recoverable: true });
-    }
+    // A settled end_turn completes cleanly; killing the native afterwards does not
+    // manufacture a transport error.
+    const expectedLastEvent = settled
+      ? { type: 'turn_completed' }
+      : { type: 'execution_error', category: 'transport', recoverable: true };
+    expect(events.at(-1)).toMatchObject(expectedLastEvent);
     await collection;
   } finally {
     await session.dispose();

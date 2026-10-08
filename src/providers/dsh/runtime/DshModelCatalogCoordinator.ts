@@ -10,9 +10,9 @@ import {
   normalizeDshDiscoveredModels,
 } from '../models';
 import {
+  type DshCatalogSnapshot,
   getCurrentDshCatalog,
   getDshProviderSettings,
-  type DshCatalogSnapshot,
   updateCurrentDshCatalog,
 } from '../settings';
 import type {

@@ -7,8 +7,8 @@ import { normalizeHostnameStringMap } from '../../core/providers/settings/Hostna
 import type { HostnameCLIPaths } from '../../core/types/settings';
 import {
   decodeDshModelId,
-  getDshAvailableReasoningEfforts,
   type DshDiscoveredModel,
+  getDshAvailableReasoningEfforts,
   normalizeDshDiscoveredModels,
 } from './models';
 

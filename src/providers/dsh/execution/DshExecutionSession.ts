@@ -19,9 +19,9 @@ import {
   RequestedRunChannel,
   SessionSnapshotState,
 } from '../../../core/execution';
-import type { SlashCommand } from '../../../core/types';
 import { ProviderModelUnavailableError } from '../../../core/providers/models/ProviderModelUnavailableError';
 import type { ProviderHost } from '../../../core/providers/ProviderHost';
+import type { SlashCommand } from '../../../core/types';
 import {
   type ACPContentBlock,
   ACPInteractionController,
@@ -38,9 +38,9 @@ import type { DshCommandCatalog } from '../commands/DshCommandCatalog';
 import { computeDshEnvironmentHash } from '../env/DshSettingsReconciler';
 import {
   decodeDshModelId,
+  type DshDiscoveredModel,
   findDshModel,
   getDshAvailableReasoningEfforts,
-  type DshDiscoveredModel,
   normalizeDshDiscoveredModels,
 } from '../models';
 import { normalizeDshCommands } from '../normalization/dshCommandNormalization';

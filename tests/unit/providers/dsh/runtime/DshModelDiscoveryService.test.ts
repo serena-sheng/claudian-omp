@@ -1,6 +1,7 @@
 import type { ProviderHost } from '@/core/providers/ProviderHost';
 import type { NormalizedDshSessionModels } from '@/providers/dsh/execution/DshSessionModelMetadata';
 import type { DshDiscoveredModel } from '@/providers/dsh/models';
+import type { DshModelCatalogProbeLike, DshModelCatalogProbeRequest } from '@/providers/dsh/runtime/DshModelCatalogProbe';
 import {
   buildDshCatalogFingerprint,
   type DshCatalogCommandRequest,
@@ -9,7 +10,6 @@ import {
   DshModelDiscoveryService,
   SpawnDshCatalogCommandRunner,
 } from '@/providers/dsh/runtime/DshModelDiscoveryService';
-import type { DshModelCatalogProbeLike, DshModelCatalogProbeRequest } from '@/providers/dsh/runtime/DshModelCatalogProbe';
 
 const dsh4: DshDiscoveredModel = {
   displayName: 'Dsh 4',

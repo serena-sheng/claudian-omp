@@ -1,7 +1,7 @@
 {
   "name": "claudian",
-  "version": "2.3.16",
-  "description": "Claudian - Claude Code embedded in Obsidian sidebar",
+  "version": "1.0.0",
+  "description": "Claudian fork that adds the Oh My Pi OMP harness and DeepSeek Harness alongside Claude Code, Codex, Grok, OpenCode and Pi. Your vault becomes their working directory for file reads, writes, search, bash commands and multi-step workflows.",
   "main": "main.js",
   "engines": {
     "node": ">=24 <25"
