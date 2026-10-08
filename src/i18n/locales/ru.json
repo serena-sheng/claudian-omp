@@ -474,6 +474,13 @@
         "desc": "Переменные окружения, передаваемые только в Pi."
       }
     },
+    "dsh": {
+      "environment": {
+        "name": "Переменные окружения DeepSeek Harness",
+        "desc": "Переменные окружения, передаваемые только в DeepSeek Harness. Укажите здесь DEEPSEEK_API_KEY для аутентификации."
+      },
+      "cliNote": "Требуется Node.js. Установите CLI: npm install -g @deepseek-ai/dsh."
+    },
     "grok": {
       "environment": {
         "name": "Переменные окружения Grok Build",

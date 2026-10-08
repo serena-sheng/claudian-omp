@@ -92,6 +92,7 @@ describe('model selection namespacing', () => {
       ['pi', 'pi/', 'assistant-1'],
       ['pi', 'pi/', 'assistant'],
       ['grok', 'grok/', 'kimi-coding'],
+      ['dsh', 'dsh:', '["deepseek-official","deepseek-v4-flash"]'],
     ] as const)('round-trips a %s model id through encode and toRuntimeModelId', (providerId, prefix, modelId) => {
       const encoded = encodeProviderModelSelectionId(providerId, modelId);
       expect(encoded).toBe(`${prefix}${modelId}`);

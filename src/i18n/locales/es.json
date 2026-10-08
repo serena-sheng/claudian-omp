@@ -474,6 +474,13 @@
         "desc": "Variables de entorno que se pasan solo a Pi."
       }
     },
+    "dsh": {
+      "environment": {
+        "name": "Variables de entorno de DeepSeek Harness",
+        "desc": "Variables de entorno que se pasan solo a DeepSeek Harness. Define DEEPSEEK_API_KEY aquí para autenticarte."
+      },
+      "cliNote": "Requiere Node.js. Instala la CLI con: npm install -g @deepseek-ai/dsh."
+    },
     "grok": {
       "environment": {
         "name": "Variables de entorno de Grok Build",

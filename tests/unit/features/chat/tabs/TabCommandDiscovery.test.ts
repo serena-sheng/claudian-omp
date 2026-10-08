@@ -123,6 +123,20 @@ describe('TabCommandDiscovery', () => {
     expect(await reloadDiscovery(0, first)).toEqual({ status: 'empty' });
   });
 
+  it('keeps a live session command snapshot and skips the probe loader', async () => {
+    const { manager } = createManager();
+    const tab = await manager.createTab();
+    const command = (name: string) => ({ id: name, name, description: name, content: '', source: 'sdk' as const });
+    jest.spyOn(tab!.executionCoordinator, 'getCommandSnapshot').mockReturnValue([command('live-one')]);
+
+    await expect(reloadDiscovery(0, tab)).resolves.toMatchObject({
+      status: 'ready', items: [{ name: 'live-one' }],
+    });
+
+    expect(commandLoader.loadCommands).not.toHaveBeenCalled();
+    expect(catalog.setCommandSnapshot).not.toHaveBeenCalled();
+  });
+
   it('runs on-demand command discovery without a runtime or provider session', async () => {
     const { manager } = createManager();
     const tab = await manager.createTab();

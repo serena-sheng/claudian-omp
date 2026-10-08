@@ -159,6 +159,11 @@ export const GROK_PROVIDER_ICON: ProviderIconSvg = {
   path: 'M3.25 3h4.18l4.8 6.64L17.88 3h3.17l-7.36 8.65L20.44 21h-4.18l-5.16-7.14L5.02 21H1.85l7.79-9.16L3.25 3Zm3.03 1.7 10.85 14.6h1.28L7.56 4.7H6.28Z',
 };
 
+export const DSH_PROVIDER_ICON: ProviderIconSvg = {
+  viewBox: '0 0 24 24',
+  path: 'M12 2C7.6 7.2 5 11 5 14.8A7 7 0 0 0 12 22a7 7 0 0 0 7-7.2C19 11 16.4 7.2 12 2Zm0 17.2a4.2 4.2 0 0 1-4.2-4.4c0-2.1 1.3-4.4 4.2-7.6 2.9 3.2 4.2 5.5 4.2 7.6a4.2 4.2 0 0 1-4.2 4.4Z',
+};
+
 export interface CreateProviderIconSvgOptions {
   className?: string;
   dataProvider?: string;
