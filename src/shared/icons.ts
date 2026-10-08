@@ -66,6 +66,72 @@ export const OPENCODE_PROVIDER_ICON: ProviderIconSvg = {
   ],
 };
 
+/** Official Oh My Pi mark, with its plug and orange accents. */
+export const OMP_PROVIDER_ICON: ProviderIconSvg = {
+  kind: 'composite',
+  viewBox: '0 0 120 90',
+  children: [
+    {
+      tag: 'g',
+      attributes: {
+        class: 'claudian-provider-icon-variant claudian-provider-icon-variant--light',
+      },
+      children: [
+        {
+          tag: 'path',
+          attributes: {
+            d: 'M12 8h96a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Zm13 12h12v60a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V20Zm50 0h12v43a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V20Z',
+            fill: '#26251E',
+          },
+        },
+        {
+          tag: 'path',
+          attributes: {
+            d: 'M74 55h14a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H74a3 3 0 0 1-3-3V58a3 3 0 0 1 3-3Z M20 14a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm84 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z',
+            fill: '#F97316',
+          },
+        },
+        {
+          tag: 'path',
+          attributes: {
+            d: 'M77 59h1a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1Zm6 0h1a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1Z',
+            fill: 'var(--background-primary, #ffffff)',
+          },
+        },
+      ],
+    },
+    {
+      tag: 'g',
+      attributes: {
+        class: 'claudian-provider-icon-variant claudian-provider-icon-variant--dark',
+      },
+      children: [
+        {
+          tag: 'path',
+          attributes: {
+            d: 'M12 8h96a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Zm13 12h12v60a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V20Zm50 0h12v43a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V20Z',
+            fill: '#FAFAFA',
+          },
+        },
+        {
+          tag: 'path',
+          attributes: {
+            d: 'M74 55h14a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H74a3 3 0 0 1-3-3V58a3 3 0 0 1 3-3Z M20 14a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm84 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z',
+            fill: '#F97316',
+          },
+        },
+        {
+          tag: 'path',
+          attributes: {
+            d: 'M77 59h1a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1Zm6 0h1a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1Z',
+            fill: 'var(--background-primary, #1b1b1b)',
+          },
+        },
+      ],
+    },
+  ],
+};
+
 export const PI_PROVIDER_ICON: ProviderIconSvg = {
   kind: 'composite',
   viewBox: '0 0 800 800',

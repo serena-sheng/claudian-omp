@@ -13,6 +13,8 @@
   --claudian-brand-pi-rgb: 255, 255, 255;
   --claudian-brand-grok: #fff;
   --claudian-brand-grok-rgb: 255, 255, 255;
+  --claudian-brand-omp: #F97316;
+  --claudian-brand-omp-rgb: 249, 115, 22;
   --claudian-error: #dc3545;
   --claudian-compact: #5bc0de;
 
@@ -32,6 +34,8 @@ body.theme-light .claudian-container {
   --claudian-brand-pi-rgb: 0, 0, 0;
   --claudian-brand-grok: #000;
   --claudian-brand-grok-rgb: 0, 0, 0;
+  --claudian-brand-omp: #EA580C;
+  --claudian-brand-omp-rgb: 234, 88, 12;
   --claudian-selection-check: #16a34a;
 }
 
@@ -64,4 +68,10 @@ body.theme-light .claudian-container {
 .claudian-container .claudian-model-option[data-provider="grok"] {
   --claudian-brand: var(--claudian-brand-grok);
   --claudian-brand-rgb: var(--claudian-brand-grok-rgb);
+}
+
+.claudian-container[data-provider="omp"],
+.claudian-container .claudian-model-option[data-provider="omp"] {
+  --claudian-brand: var(--claudian-brand-omp);
+  --claudian-brand-rgb: var(--claudian-brand-omp-rgb);
 }

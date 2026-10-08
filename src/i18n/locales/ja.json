@@ -428,6 +428,12 @@
         "link": "OpenCode v2 に移行"
       }
     },
+    "omp": {
+      "environment": {
+        "name": "OMP 環境変数",
+        "desc": "OMP にのみ渡される環境変数。"
+      }
+    },
     "pi": {
       "environment": {
         "name": "Pi 環境変数",

@@ -16,6 +16,7 @@ describe('built-in ProviderModule catalog', () => {
       'claude',
       'codex',
       'grok',
+      'omp',
       'opencode',
       'pi',
     ]);
@@ -58,6 +59,7 @@ describe('built-in ProviderModule catalog', () => {
       claude: true,
       codex: false,
       grok: false,
+      omp: false,
       opencode: false,
       pi: false,
     };

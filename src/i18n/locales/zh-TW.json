@@ -428,6 +428,12 @@
         "link": "遷移至 OpenCode v2"
       }
     },
+    "omp": {
+      "environment": {
+        "name": "OMP 環境變數",
+        "desc": "僅傳遞給 OMP 的環境變數。"
+      }
+    },
     "pi": {
       "environment": {
         "name": "Pi 環境變數",

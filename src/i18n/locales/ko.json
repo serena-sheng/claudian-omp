@@ -428,6 +428,12 @@
         "link": "OpenCode v2로 마이그레이션"
       }
     },
+    "omp": {
+      "environment": {
+        "name": "OMP 환경 변수",
+        "desc": "OMP에만 전달되는 환경 변수입니다."
+      }
+    },
     "pi": {
       "environment": {
         "name": "Pi 환경 변수",

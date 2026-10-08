@@ -428,6 +428,12 @@
         "link": "迁移到 OpenCode v2"
       }
     },
+    "omp": {
+      "environment": {
+        "name": "OMP 环境变量",
+        "desc": "仅传递给 OMP 的环境变量。"
+      }
+    },
     "pi": {
       "environment": {
         "name": "Pi 环境变量",

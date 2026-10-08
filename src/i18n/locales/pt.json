@@ -428,6 +428,12 @@
         "link": "Migrar para o OpenCode v2"
       }
     },
+    "omp": {
+      "environment": {
+        "name": "Variáveis de ambiente do OMP",
+        "desc": "Variáveis de ambiente passadas apenas para o OMP."
+      }
+    },
     "pi": {
       "environment": {
         "name": "Variáveis de ambiente do Pi",

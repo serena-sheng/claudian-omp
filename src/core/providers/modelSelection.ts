@@ -5,6 +5,7 @@ const PROVIDER_MODEL_SELECTION_PREFIXES: Partial<Record<ProviderId, string>> = {
   codex: 'openai-codex/',
   grok: 'grok/',
   opencode: 'opencode:',
+  omp: 'omp/',
   pi: 'pi/',
 };
 
