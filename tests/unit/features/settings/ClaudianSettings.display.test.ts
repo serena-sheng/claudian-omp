@@ -432,6 +432,16 @@ describe('ClaudianSettingTab display settings', () => {
       .mockReturnValue(['claude', 'codex']);
     jest.spyOn(ProviderRegistry, 'getProviderDisplayName')
       .mockImplementation(providerId => providerId.toUpperCase());
+    jest.spyOn(ProviderRegistry, 'getCapabilities').mockImplementation((providerId = 'claude') => ({
+      providerId,
+      supportsNativeHistory: false,
+      supportsEphemeralSessions: false,
+      supportsRewind: false,
+      supportsFork: false,
+      supportsProviderCommands: false,
+      supportsImageAttachments: false,
+      reasoningControl: 'none',
+    }));
     jest.spyOn(ProviderRegistry, 'getTitleGenerationModelOptions').mockReturnValue([]);
     const ensureInitialized = jest.spyOn(ProviderWorkspaceRegistry, 'ensureInitialized')
       .mockResolvedValue(undefined);
@@ -459,6 +469,16 @@ describe('ClaudianSettingTab display settings', () => {
       .mockReturnValue(['claude', 'codex']);
     jest.spyOn(ProviderRegistry, 'getProviderDisplayName')
       .mockImplementation(providerId => providerId.toUpperCase());
+    jest.spyOn(ProviderRegistry, 'getCapabilities').mockImplementation((providerId = 'claude') => ({
+      providerId,
+      supportsNativeHistory: false,
+      supportsEphemeralSessions: false,
+      supportsRewind: false,
+      supportsFork: false,
+      supportsProviderCommands: false,
+      supportsImageAttachments: false,
+      reasoningControl: 'none',
+    }));
     jest.spyOn(ProviderRegistry, 'getTitleGenerationModelOptions').mockReturnValue([]);
     const ensureInitialized = jest.spyOn(ProviderWorkspaceRegistry, 'ensureInitialized')
       .mockResolvedValue(undefined);
@@ -486,6 +506,16 @@ describe('ClaudianSettingTab display settings', () => {
     let enabled = false;
     jest.spyOn(ProviderRegistry, 'getRegisteredProviderIds').mockReturnValue(['codex']);
     jest.spyOn(ProviderRegistry, 'getProviderDisplayName').mockReturnValue('CODEX');
+    jest.spyOn(ProviderRegistry, 'getCapabilities').mockImplementation((providerId = 'claude') => ({
+      providerId,
+      supportsNativeHistory: false,
+      supportsEphemeralSessions: false,
+      supportsRewind: false,
+      supportsFork: false,
+      supportsProviderCommands: false,
+      supportsImageAttachments: false,
+      reasoningControl: 'none',
+    }));
     jest.spyOn(ProviderRegistry, 'getTitleGenerationModelOptions').mockReturnValue([]);
     jest.spyOn(ProviderRegistry, 'isEnabled').mockImplementation(() => enabled);
     jest.spyOn(ProviderWorkspaceRegistry, 'ensureInitialized').mockResolvedValue(undefined);

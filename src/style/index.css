@@ -53,6 +53,7 @@
 @import url("./settings/base.css");
 @import url("./settings/cli-installation.css");
 @import url("./settings/provider-readiness.css");
+@import url("./settings/capability-matrix.css");
 @import url("./settings/env-snippets.css");
 @import url("./settings/slash-settings.css");
 @import url("./settings/agent-skills.css");

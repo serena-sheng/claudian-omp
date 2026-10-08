@@ -129,6 +129,43 @@
     }
   },
   "settings": {
+      "capabilityMatrix": {
+          "title": "Provider capabilities",
+          "desc": "What each agent harness can actually do, read straight from the capabilities the providers declare rather than a table kept here.",
+          "providerColumn": "Provider",
+          "unsupported": "Not supported",
+          "reasoningEffort": "effort",
+          "reasoningNone": "none",
+          "columns": {
+              "imageAttachments": "Images",
+              "fork": "Fork",
+              "rewind": "Rewind",
+              "turnSteer": "Steer",
+              "planMode": "Plan",
+              "instructionMode": "Instruct",
+              "providerCommands": "Commands",
+              "reasoningControl": "Reasoning"
+          }
+      },
+      "gettingStarted": {
+          "title": "Getting started",
+          "install": {
+              "name": "1. Install an agent CLI",
+              "desc": "Install at least one harness: the OMP install script, or npm install -g @deepseek-ai/dsh. The plugin never installs anything for you."
+          },
+          "provider": {
+              "name": "2. Enable it here",
+              "desc": "Enable the provider in the Providers tab and pick a model. Its readiness panel says what is still missing."
+          },
+          "chat": {
+              "name": "3. Start a chat",
+              "desc": "Open the chat view from the ribbon icon or the command palette and send a message."
+          }
+      },
+      "hotkeys": {
+          "title": "Hotkeys",
+          "desc": "This plugin sets no default hotkeys. Bind them in Obsidian's Settings, Hotkeys - search for \"Claudian OMP\" to see every command it registers."
+      },
     "readiness": {
       "heading": "준비 상태",
       "refresh": "다시 확인",

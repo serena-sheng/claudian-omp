@@ -129,6 +129,43 @@
     }
   },
   "settings": {
+      "capabilityMatrix": {
+          "title": "各 provider 能力对照",
+          "desc": "每个 agent harness 实际能做什么——数据直接读自 provider 自身的能力声明，不是写死的表。",
+          "providerColumn": "Provider",
+          "unsupported": "不支持",
+          "reasoningEffort": "effort",
+          "reasoningNone": "无",
+          "columns": {
+              "imageAttachments": "图片",
+              "fork": "分支",
+              "rewind": "回退",
+              "turnSteer": "插入",
+              "planMode": "计划",
+              "instructionMode": "指令",
+              "providerCommands": "命令",
+              "reasoningControl": "推理控制"
+          }
+      },
+      "gettingStarted": {
+          "title": "快速上手",
+          "install": {
+              "name": "1. 装一个 agent CLI",
+              "desc": "至少装一个 harness（例如用 OMP 的安装脚本，或 npm install -g @deepseek-ai/dsh）。插件不会替你安装任何东西。"
+          },
+          "provider": {
+              "name": "2. 在这里选中它",
+              "desc": "在 Providers 里启用该 provider 并选一个模型；它的体检面板会告诉你还缺什么。"
+          },
+          "chat": {
+              "name": "3. 开始对话",
+              "desc": "从侧栏图标或命令面板打开对话视图，发一条消息即可。"
+          }
+      },
+      "hotkeys": {
+          "title": "快捷键",
+          "desc": "本插件不预置任何快捷键。请到 Obsidian 的「设置 → 快捷键」里自行绑定——搜索「Claudian OMP」即可看到它注册的全部命令。"
+      },
     "readiness": {
       "heading": "运行状态",
       "refresh": "重新检查",

@@ -22,6 +22,10 @@ import { DebouncedSettingsWriter } from '@/shared/settings/DebouncedSettingsWrit
 import { renderEnvironmentSettingsSection } from '@/shared/settings/EnvironmentSettingsSection';
 import { frameSettingsGroups } from '@/shared/settings/SettingsGroups';
 
+import { renderGettingStartedSection } from './GettingStartedSection';
+import { renderHotkeysSection } from './HotkeysSection';
+import { renderProviderCapabilityMatrix } from './ProviderCapabilityMatrix';
+
 type SettingsTabId = 'general' | 'providers' | 'skills';
 
 export class ClaudianSettingTab extends PluginSettingTab {
@@ -235,6 +239,14 @@ export class ClaudianSettingTab extends PluginSettingTab {
       });
       providerButtons.set(providerId, button);
     }
+
+    // --- All providers at a glance ---
+
+    new Setting(providersContent).setName(t('settings.capabilityMatrix.title')).setHeading();
+    const capabilityGroup = providersContent.createDiv({ cls: 'claudian-settings-group' });
+    renderProviderCapabilityMatrix(
+      capabilityGroup.createDiv({ cls: 'claudian-settings-group-body' }),
+    );
 
     if (this.activeTab === 'providers' && this.activeProviderTab) {
       void renderProviderTab(this.activeProviderTab);
@@ -696,6 +708,14 @@ export class ClaudianSettingTab extends PluginSettingTab {
       desc: t('settings.sharedEnvironment.desc'),
       placeholder: 'PATH=/opt/homebrew/bin:/usr/local/bin\nHTTPS_PROXY=http://proxy.example.com:8080\nSSL_CERT_FILE=/path/to/cert.pem',
     });
+
+    // --- Reference ---
+
+    new Setting(container).setName(t('settings.gettingStarted.title')).setHeading();
+    renderGettingStartedSection(container);
+
+    new Setting(container).setName(t('settings.hotkeys.title')).setHeading();
+    renderHotkeysSection(container);
   }
 
   private disposeProviderSettingsRenders(): void {

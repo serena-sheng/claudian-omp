@@ -1,0 +1,38 @@
+/* Capability matrix: what each agent harness can do, read from the providers. */
+.claudian-capability-matrix-desc {
+  margin: 0 0 10px;
+  color: var(--text-muted);
+}
+
+.claudian-capability-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-ui-smaller);
+}
+
+.claudian-capability-matrix th,
+.claudian-capability-matrix td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.claudian-capability-matrix thead th {
+  color: var(--text-muted);
+  font-weight: var(--font-medium);
+}
+
+.claudian-capability-matrix-provider {
+  text-align: start;
+  color: var(--text-normal);
+  font-weight: var(--font-medium);
+}
+
+.claudian-capability-matrix-cell.is-supported {
+  color: var(--text-success);
+}
+
+.claudian-capability-matrix-cell.is-unsupported {
+  color: var(--text-faint);
+}
