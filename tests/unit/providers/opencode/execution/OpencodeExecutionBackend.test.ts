@@ -328,10 +328,10 @@ describe('OpencodeExecutionBackend', () => {
     mockConnectionInitialize.mockResolvedValue({});
     mockPrepareLaunchArtifacts.mockResolvedValue({
       configContent: '{}',
-      configPath: '/vault/.claudian-omp/opencode/config.json',
+      configPath: '/vault/.claudian-fusion/opencode/config.json',
       databasePath: '/native/opencode.db',
       launchKey: 'launch-key',
-      systemPromptPath: '/vault/.claudian-omp/opencode/system.md',
+      systemPromptPath: '/vault/.claudian-fusion/opencode/system.md',
     });
   });
 
@@ -398,10 +398,10 @@ describe('OpencodeExecutionBackend', () => {
     const disposal = session.dispose();
     artifacts.resolve({
       configContent: '{}',
-      configPath: '/vault/.claudian-omp/opencode/config.json',
+      configPath: '/vault/.claudian-fusion/opencode/config.json',
       databasePath: '/native/opencode.db',
       launchKey: 'launch-key',
-      systemPromptPath: '/vault/.claudian-omp/opencode/system.md',
+      systemPromptPath: '/vault/.claudian-fusion/opencode/system.md',
     });
 
     await disposal;

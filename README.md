@@ -1,4 +1,4 @@
-# Claudian OMP
+# Claudian Fusion
 
 An independent fork of [Claudian](https://github.com/YishenTu/claudian) by Yishen Tu.
 It keeps everything Claudian already does — chat tabs, inline editing, session manager,
@@ -74,7 +74,7 @@ Required by the Obsidian developer policies, and true as of this fork:
   terminal. It is off by default; output is capped at 1 MiB and commands are killed
   after 30 seconds. Nothing here is model-driven: it only runs what you type after `!`.
 - **What is stored locally.** The plugin keeps its settings, session metadata and token
-  usage log inside your vault, under `.claudian-omp/`. The usage log records, per turn, the
+  usage log inside your vault, under `.claudian-fusion/`. The usage log records, per turn, the
   conversation id, provider, model and token counts — never message content — and is
   trimmed to 90 days. Nothing is uploaded anywhere by the plugin itself.
 - **Paid services.** Some providers require a paid subscription or API key. The plugin
@@ -90,10 +90,10 @@ explicit permission from the original author before a fork may be listed there
 out, install it manually or via BRAT:
 
 1. Download `main.js`, `manifest.json` and `styles.css` from the latest release.
-2. Put them in `YOUR_VAULT/.obsidian/plugins/claudian-omp/`.
-3. Enable **Claudian OMP** in Settings, Community plugins.
+2. Put them in `YOUR_VAULT/.obsidian/plugins/claudian-fusion/`.
+3. Enable **Claudian Fusion** in Settings, Community plugins.
 
-This fork registers its own view type and keeps its own `.claudian-omp/` storage, so it can
+This fork registers its own view type and keeps its own `.claudian-fusion/` storage, so it can
 sit next to upstream **Claudian** without either one registering the same view or
 overwriting the other's settings. Install whichever you want to use.
 
@@ -109,7 +109,7 @@ Requires Node.js 24.x. `npm run test:unit` runs the unit suite; `npm run typeche
 
 ## Configuration
 
-Settings live in `.claudian-omp/` inside your vault. The plugin stores its settings file,
+Settings live in `.claudian-fusion/` inside your vault. The plugin stores its settings file,
 session metadata and cached catalogs there — separate from upstream Claudian, which uses
 `.claudian/`, so the two can coexist on disk without corrupting each other.
 

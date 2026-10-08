@@ -164,7 +164,7 @@
       },
       "hotkeys": {
           "title": "快捷键",
-          "desc": "本插件不预置任何快捷键。请到 Obsidian 的「设置 → 快捷键」里自行绑定——搜索「Claudian OMP」即可看到它注册的全部命令。"
+          "desc": "本插件不预置任何快捷键。请到 Obsidian 的「设置 → 快捷键」里自行绑定——搜索「Claudian Fusion」即可看到它注册的全部命令。"
       },
       "usage": {
           "title": "Token usage",

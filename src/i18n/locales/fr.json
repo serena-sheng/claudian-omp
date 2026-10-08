@@ -164,7 +164,7 @@
       },
       "hotkeys": {
           "title": "Hotkeys",
-          "desc": "This plugin sets no default hotkeys. Bind them in Obsidian's Settings, Hotkeys - search for \"Claudian OMP\" to see every command it registers."
+          "desc": "This plugin sets no default hotkeys. Bind them in Obsidian's Settings, Hotkeys - search for \"Claudian Fusion\" to see every command it registers."
       },
       "usage": {
           "title": "Token usage",

@@ -128,7 +128,7 @@ abstract class OmpExtensionModal<TResult extends Record<string, unknown>> extend
 
   override onOpen(): void {
     this.contentEl.empty();
-    this.contentEl.addClass('claudian-omp-extension-modal');
+    this.contentEl.addClass('claudian-fusion-extension-modal');
     this.render();
   }
 
@@ -165,7 +165,7 @@ class OmpSelectModal extends OmpExtensionModal<{ cancelled?: boolean; value?: st
   protected render(): void {
     this.renderHeader('OMP extension');
     const options = getSelectOptions(this.request);
-    const listEl = this.contentEl.createDiv({ cls: 'claudian-omp-extension-options' });
+    const listEl = this.contentEl.createDiv({ cls: 'claudian-fusion-extension-options' });
     for (const option of options) {
       const button = listEl.createEl('button', { text: option.label, attr: { type: 'button' } });
       button.addEventListener('click', () => {
@@ -192,7 +192,7 @@ class OmpConfirmModal extends OmpExtensionModal<{ cancelled?: boolean; confirmed
 
   protected render(): void {
     this.renderHeader('OMP extension');
-    const actionsEl = this.contentEl.createDiv({ cls: 'claudian-omp-extension-actions' });
+    const actionsEl = this.contentEl.createDiv({ cls: 'claudian-fusion-extension-actions' });
     const confirmButton = actionsEl.createEl('button', { text: 'Confirm', attr: { type: 'button' } });
     confirmButton.addEventListener('click', () => {
       this.finish({ confirmed: true });
@@ -236,7 +236,7 @@ class OmpTextModal extends OmpExtensionModal<{ cancelled?: boolean; value?: stri
       (input as HTMLTextAreaElement).rows = 8;
     }
 
-    const actionsEl = this.contentEl.createDiv({ cls: 'claudian-omp-extension-actions' });
+    const actionsEl = this.contentEl.createDiv({ cls: 'claudian-fusion-extension-actions' });
     const submitButton = actionsEl.createEl('button', { text: 'Submit', attr: { type: 'button' } });
     submitButton.addEventListener('click', () => {
       this.finish({ value: input.value });

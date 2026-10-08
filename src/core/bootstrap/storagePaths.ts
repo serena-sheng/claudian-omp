@@ -1,6 +1,6 @@
 import { type InstallationKey, isInstallationKey } from '@/core/device/InstallationKey';
 
-export const CLAUDIAN_STORAGE_PATH = '.claudian-omp';
+export const CLAUDIAN_STORAGE_PATH = '.claudian-fusion';
 
 export const CLAUDIAN_SETTINGS_PATH = `${CLAUDIAN_STORAGE_PATH}/claudian-settings.json`;
 
