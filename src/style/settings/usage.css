@@ -1,0 +1,39 @@
+/* Token usage metering: today's totals plus per-day and per-session tables. */
+.claudian-usage-note,
+.claudian-usage-empty {
+  margin: 0 0 10px;
+  color: var(--text-muted);
+}
+
+.claudian-usage-today {
+  margin-bottom: 12px;
+  color: var(--text-normal);
+}
+
+.claudian-usage-daily,
+.claudian-usage-sessions {
+  width: 100%;
+  margin-bottom: 12px;
+  border-collapse: collapse;
+  font-size: var(--font-ui-smaller);
+}
+
+.claudian-usage-daily th,
+.claudian-usage-daily td,
+.claudian-usage-sessions th,
+.claudian-usage-sessions td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  text-align: start;
+}
+
+.claudian-usage-daily thead th,
+.claudian-usage-sessions thead th {
+  color: var(--text-muted);
+  font-weight: var(--font-medium);
+}
+
+.claudian-usage-daily td:not(:first-child),
+.claudian-usage-sessions td:not(:first-child) {
+  text-align: end;
+}

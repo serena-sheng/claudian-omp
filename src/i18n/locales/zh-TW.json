@@ -166,6 +166,19 @@
           "title": "快捷键",
           "desc": "本插件不预置任何快捷键。请到 Obsidian 的「设置 → 快捷键」里自行绑定——搜索「Claudian OMP」即可看到它注册的全部命令。"
       },
+      "usage": {
+          "title": "Token usage",
+          "today": "Today",
+          "total": "Total",
+          "input": "Input",
+          "output": "Output",
+          "cache": "Cache",
+          "date": "Date",
+          "sessions": "Top sessions",
+          "empty": "No usage recorded yet.",
+          "note": "Figures are best-effort, as reported by each provider.",
+          "last7days": "Last 7 days"
+      },
     "readiness": {
       "heading": "執行狀態",
       "refresh": "重新檢查",

@@ -1,9 +1,81 @@
 import type { UsageInfo } from '../../../core/types';
 
+/**
+ * Per-turn token consumption, as a delta of the session-cumulative totals the
+ * `get_session_stats` RPC reports under `tokens`. The execution session owns
+ * the cumulative bookkeeping; this builder stays a pure function.
+ */
+export interface OmpTurnTokenDelta {
+  input: number;
+  output: number;
+  cacheRead: number;
+  cacheWrite: number;
+}
+
+/** Session-cumulative token totals reported by `get_session_stats` (`tokens`). */
+export interface OmpSessionTokenTotals {
+  input: number;
+  output: number;
+  cacheRead: number;
+  cacheWrite: number;
+}
+
+/** Reads the session-cumulative `tokens` block, or null when stats do not carry one. */
+export function readOmpSessionTokenTotals(response: unknown): OmpSessionTokenTotals | null {
+  const tokens = getRecord(response).tokens;
+  if (tokens === undefined) return null;
+  const record = getRecord(tokens);
+  return {
+    input: getNumber(record.input) ?? 0,
+    output: getNumber(record.output) ?? 0,
+    cacheRead: getNumber(record.cacheRead) ?? getNumber(record.cache_read) ?? 0,
+    cacheWrite: getNumber(record.cacheWrite) ?? getNumber(record.cache_write) ?? 0,
+  };
+}
+
+/**
+ * Diffs two cumulative snapshots; the first read counts as the full delta and
+ * regressions (session reload, compaction of counters) clamp to zero.
+ */
+export function diffOmpSessionTokenTotals(
+  previous: OmpSessionTokenTotals | null,
+  current: OmpSessionTokenTotals,
+): OmpTurnTokenDelta {
+  const delta = (next: number, prior: number | undefined): number => Math.max(0, next - (prior ?? 0));
+  return {
+    input: delta(current.input, previous?.input),
+    output: delta(current.output, previous?.output),
+    cacheRead: delta(current.cacheRead, previous?.cacheRead),
+    cacheWrite: delta(current.cacheWrite, previous?.cacheWrite),
+  };
+}
+
+/**
+ * What one `get_session_stats` read contributes to metering.
+ *
+ * The counters are session-cumulative, so a turn is normally the difference
+ * against the previous read. A session that adopted an existing native session
+ * (resume) opens with counters that belong to earlier work: that first read is
+ * a baseline and is billed as nothing. `undefined` means the payload carried no
+ * cumulative block at all, leaving callers on their previous behaviour.
+ */
+export function resolveOmpTurnTokens(params: {
+  adopted: boolean;
+  current: OmpSessionTokenTotals | null;
+  previous: OmpSessionTokenTotals | null;
+}): OmpTurnTokenDelta | undefined {
+  if (params.current === null) return undefined;
+  if (params.adopted && params.previous === null) {
+    return { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 };
+  }
+  return diffOmpSessionTokenTotals(params.previous, params.current);
+}
+
 export function buildOmpUsageInfo(
   response: unknown,
   model: string | null,
   catalogContextWindow?: number,
+  turnTokens?: OmpTurnTokenDelta,
 ): UsageInfo | null {
   const stats = getRecord(response);
   const contextUsage = getRecord(stats.contextUsage ?? stats.context_usage ?? stats);
@@ -16,7 +88,8 @@ export function buildOmpUsageInfo(
     ?? getNumber(contextUsage.tokens)
     ?? getNumber(contextUsage.used)
     ?? 0;
-  const inputTokens = getNumber(contextUsage.inputTokens)
+  const inputTokens = turnTokens?.input
+    ?? getNumber(contextUsage.inputTokens)
     ?? getNumber(contextUsage.input_tokens)
     ?? contextTokens;
 
@@ -25,16 +98,19 @@ export function buildOmpUsageInfo(
   }
 
   return {
-    cacheCreationInputTokens: getNumber(contextUsage.cacheCreationInputTokens)
+    cacheCreationInputTokens: turnTokens?.cacheWrite
+      ?? getNumber(contextUsage.cacheCreationInputTokens)
       ?? getNumber(contextUsage.cache_creation_input_tokens)
       ?? 0,
-    cacheReadInputTokens: getNumber(contextUsage.cacheReadInputTokens)
+    cacheReadInputTokens: turnTokens?.cacheRead
+      ?? getNumber(contextUsage.cacheReadInputTokens)
       ?? getNumber(contextUsage.cache_read_input_tokens)
       ?? 0,
     contextTokens,
     contextWindow,
     inputTokens,
     ...(model ? { model } : {}),
+    ...(turnTokens ? { outputTokens: turnTokens.output } : {}),
     percentage: normalizeOmpUsagePercentage(
       getNumber(contextUsage.percentage),
       contextTokens,

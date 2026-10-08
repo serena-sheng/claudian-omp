@@ -96,6 +96,10 @@ export class ClaudianFeatureHost implements FeatureHost {
     void this.domains.notifyProviderChatOptionsChanged(providerId);
   }
 
+  getConversationTitle(conversationId: string): string | null {
+    return this.domains.conversations.getConversationSummary(conversationId)?.title ?? null;
+  }
+
   getActiveModelSelection(): StoredChatModelSelection | null {
     const tab = this.domains.views.getView()?.getActiveTab();
     if (!tab) return null;

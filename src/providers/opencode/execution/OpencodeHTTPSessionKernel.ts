@@ -546,12 +546,13 @@ export class OpencodeHTTPSessionKernel implements OpencodeSessionKernel {
     const model = this.models.find(model => model.id === this.model?.id && model.providerID === this.model?.providerID);
     const contextWindow = isRecord(model?.limit) ? count(model.limit.context) : 0;
     const inputTokens = count(value.input);
+    const outputTokens = count(value.output);
     const cacheReadInputTokens = count(cache.read);
     const cacheCreationInputTokens = count(cache.write);
     const contextTokens = countTokens(value);
     this.emit({ type: 'usage_updated', usage: {
       model: this.model ? `${this.model.providerID}/${this.model.id}` : undefined,
-      inputTokens, cacheReadInputTokens, cacheCreationInputTokens, contextTokens, contextWindow,
+      inputTokens, outputTokens, cacheReadInputTokens, cacheCreationInputTokens, contextTokens, contextWindow,
       percentage: contextWindow > 0 ? Math.min(100, Math.max(0, Math.round(contextTokens / contextWindow * 100))) : 0,
     } });
   }

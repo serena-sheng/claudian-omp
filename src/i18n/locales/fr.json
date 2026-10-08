@@ -166,6 +166,19 @@
           "title": "Hotkeys",
           "desc": "This plugin sets no default hotkeys. Bind them in Obsidian's Settings, Hotkeys - search for \"Claudian OMP\" to see every command it registers."
       },
+      "usage": {
+          "title": "Token usage",
+          "today": "Today",
+          "total": "Total",
+          "input": "Input",
+          "output": "Output",
+          "cache": "Cache",
+          "date": "Date",
+          "sessions": "Top sessions",
+          "empty": "No usage recorded yet.",
+          "note": "Figures are best-effort, as reported by each provider.",
+          "last7days": "Last 7 days"
+      },
     "readiness": {
       "heading": "État de préparation",
       "refresh": "Revérifier",

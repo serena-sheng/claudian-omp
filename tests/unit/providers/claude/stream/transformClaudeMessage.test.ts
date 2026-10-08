@@ -894,6 +894,7 @@ describe('transformSDKMessage', () => {
           usage: {
             model: 'glm-5.1',
             inputTokens: 16,
+            outputTokens: 6,
             cacheCreationInputTokens: 0,
             cacheReadInputTokens: 0,
             contextWindow: 0,
@@ -967,6 +968,7 @@ describe('transformSDKMessage', () => {
           usage: {
             model: 'sonnet',
             inputTokens: 10,
+            outputTokens: 4,
             cacheCreationInputTokens: 0,
             cacheReadInputTokens: 0,
             contextWindow: 0,
@@ -1004,6 +1006,7 @@ describe('transformSDKMessage', () => {
           usage: {
             model: 'custom-model',
             inputTokens: 250000,
+            outputTokens: 4,
             cacheCreationInputTokens: 0,
             cacheReadInputTokens: 0,
             contextWindow: 1_000_000,
@@ -1064,6 +1067,7 @@ describe('transformSDKMessage', () => {
           usage: {
             model: 'sonnet',
             inputTokens: 10,
+            outputTokens: 0,
             cacheCreationInputTokens: 0,
             cacheReadInputTokens: 0,
             contextWindow: 0,
@@ -1552,6 +1556,7 @@ describe('transformSDKMessage', () => {
       expect((usageResults[0] as any).usage).toEqual({
         model: 'sonnet',
         inputTokens: 1000,
+        outputTokens: 500,
         cacheCreationInputTokens: 300,
         cacheReadInputTokens: 200,
         contextWindow: 0,
@@ -1629,6 +1634,7 @@ describe('transformSDKMessage', () => {
           usage: {
             model: 'sonnet',
             inputTokens: 0,
+            outputTokens: 6,
             cacheCreationInputTokens: 0,
             cacheReadInputTokens: 0,
             contextWindow: 0,

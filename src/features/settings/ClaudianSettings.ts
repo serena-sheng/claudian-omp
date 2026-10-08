@@ -25,6 +25,7 @@ import { frameSettingsGroups } from '@/shared/settings/SettingsGroups';
 import { renderGettingStartedSection } from './GettingStartedSection';
 import { renderHotkeysSection } from './HotkeysSection';
 import { renderProviderCapabilityMatrix } from './ProviderCapabilityMatrix';
+import { renderUsageSection } from './UsageSection';
 
 type SettingsTabId = 'general' | 'providers' | 'skills';
 
@@ -716,6 +717,13 @@ export class ClaudianSettingTab extends PluginSettingTab {
 
     new Setting(container).setName(t('settings.hotkeys.title')).setHeading();
     renderHotkeysSection(container);
+
+    // --- Usage ---
+
+    new Setting(container).setName(t('settings.usage.title')).setHeading();
+    renderUsageSection(container, {
+      resolveConversationTitle: conversationId => this.host.getConversationTitle?.(conversationId) ?? undefined,
+    });
   }
 
   private disposeProviderSettingsRenders(): void {

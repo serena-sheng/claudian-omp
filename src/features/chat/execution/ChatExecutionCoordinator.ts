@@ -20,6 +20,7 @@ import type {
   ProviderSessionEvent,
   ProviderSessionSnapshot,
   ProviderToolPolicy,
+  ProviderUsageUpdatedEvent,
 } from '@/core/execution';
 import {
   isBranchableExecutionSession,
@@ -44,6 +45,7 @@ import {
   reduceRequestedTurnIdentity,
 } from '@/features/chat/execution/RequestedTurnIdentity';
 import { SessionEventStream } from '@/features/chat/execution/SessionEventStream';
+import { getUsageLedger } from '@/features/usage/UsageLedger';
 import { throwIfAborted } from '@/utils/abort';
 import { toError } from '@/utils/error';
 
@@ -905,6 +907,7 @@ export class ChatExecutionCoordinator {
     if (!binding || !this.#isBindingCurrent(binding)) return;
     const admitted = binding.events.accept(event, binding.model);
     if (!admitted) return;
+    if (admitted.type === 'usage_updated') this.#recordUsage(binding.conversation, admitted.usage);
     if (event.type === 'background_turn_started') {
       this.#publishBackgroundWork();
     }
@@ -927,6 +930,26 @@ export class ChatExecutionCoordinator {
     if (event.type === 'background_turn_completed') {
       this.#publishBackgroundWork();
       this.#restartIdleTimer();
+    }
+  }
+
+  /** Best-effort metering: a missing or failing ledger must never touch the event stream. */
+  #recordUsage(
+    conversation: ChatExecutionConversationBinding,
+    usage: ProviderUsageUpdatedEvent['usage'],
+  ): void {
+    try {
+      getUsageLedger()?.record({
+        conversationId: conversation.conversationId,
+        providerId: conversation.providerId,
+        ...(usage.model ? { model: usage.model } : {}),
+        inputTokens: usage.inputTokens,
+        outputTokens: usage.outputTokens ?? 0,
+        cacheReadInputTokens: usage.cacheReadInputTokens ?? 0,
+        cacheCreationInputTokens: usage.cacheCreationInputTokens ?? 0,
+      });
+    } catch {
+      // Intentionally swallowed; metering is observational only.
     }
   }
 

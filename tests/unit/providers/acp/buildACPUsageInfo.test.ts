@@ -24,6 +24,7 @@ describe('buildACPUsageInfo', () => {
       contextWindow: 200_000,
       inputTokens: 1200,
       model: 'gemini-2.5-pro',
+      outputTokens: 400,
       percentage: 25,
     });
   });

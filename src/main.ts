@@ -41,6 +41,7 @@ import { ZenModeController } from './features/chat/zen/ZenModeController';
 import { createInlineEditCommand } from './features/inline-edit/inlineEditCommand';
 import { InlineEditSessionOwner } from './features/inline-edit/InlineEditSessionOwner';
 import { ClaudianSettingTab } from './features/settings/ClaudianSettings';
+import { initUsageLedger } from './features/usage/UsageLedger';
 import { getBuiltInProviderDefaultConfigs } from './providers/defaultProviderConfigs';
 
 export default class ClaudianPlugin extends Plugin {
@@ -203,6 +204,7 @@ export default class ClaudianPlugin extends Plugin {
     this.settings = settings.getCommittedSettings();
     this.settingsCoordinator = settings;
     this.storage = domains.storage;
+    await initUsageLedger(this.storage.getAdapter());
     this.sessionMetadata = domains.sessionMetadata;
     this.nativeSessionArchives = domains.nativeSessionArchives;
 

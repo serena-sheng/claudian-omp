@@ -27,4 +27,7 @@ export interface FeatureHost {
 
   /** Selected execution context, without exposing a chat view or runtime. */
   getActiveModelSelection(): StoredChatModelSelection | null;
+
+  /** Conversation title for display-only lookups; null when metadata is unavailable. */
+  getConversationTitle?(conversationId: string): string | null;
 }

@@ -501,6 +501,7 @@ export function projectTokenUsage(params: TokenUsageUpdatedNotification): UsageI
 
   return {
     inputTokens: last.inputTokens,
+    outputTokens: last.outputTokens,
     cacheCreationInputTokens: 0,
     cacheReadInputTokens: last.cachedInputTokens,
     contextWindow,

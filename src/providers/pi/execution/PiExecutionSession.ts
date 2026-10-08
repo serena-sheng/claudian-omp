@@ -82,7 +82,7 @@ import {
   normalizePiRPCEvent,
   type PiEventNormalizationState,
 } from '../normalization/piEventNormalization';
-import { buildPiUsageInfo } from '../runtime/buildPiUsageInfo';
+import { buildPiUsageInfo, type PiSessionTokenTotals,readPiSessionTokenTotals, resolvePiTurnTokens } from '../runtime/buildPiUsageInfo';
 import type { PiExtensionUIRenderer } from '../runtime/PiExtensionUIBridge';
 import {
   buildPiLaunchSpec,
@@ -247,8 +247,12 @@ implements ProviderExecutionSession, SteerableExecutionSession {
     this.providerSessionId = nativePersistenceDisabled
       ? null
       : providerSessionId;
-    this.nativeConversationContextEstablished = !nativePersistenceDisabled
+    const resumedNativeSession = !nativePersistenceDisabled
       && Boolean(state.sessionId || state.sessionFile || providerSessionId);
+    // A resumed native session starts with non-zero counters, so its first stats
+    // read is a baseline rather than this turn's usage.
+    this.resumedNativeSession = resumedNativeSession;
+    this.nativeConversationContextEstablished = resumedNativeSession;
     this.state = new SessionSnapshotState({
       providerId: this.providerId,
       providerState: {
@@ -1557,6 +1561,12 @@ implements ProviderExecutionSession, SteerableExecutionSession {
     return path;
   }
 
+  /** True when this session adopted an existing native session with prior counters. */
+  private readonly resumedNativeSession: boolean;
+
+  /** Session-cumulative totals from the last `get_session_stats` read; usage events carry the delta. */
+  private lastSessionTokens: PiSessionTokenTotals | null = null;
+
   async #fetchUsage(model: string, signal?: AbortSignal) {
     if (!this.kernel) return null;
     const settings = getPiProviderSettings(this.host.settings);
@@ -1567,7 +1577,14 @@ implements ProviderExecutionSession, SteerableExecutionSession {
       10_000,
       signal,
     );
-    return buildPiUsageInfo(response, model, contextWindow);
+    const totals = readPiSessionTokenTotals(response);
+    const turnTokens = resolvePiTurnTokens({
+      adopted: this.resumedNativeSession,
+      current: totals,
+      previous: this.lastSessionTokens,
+    });
+    if (totals) this.lastSessionTokens = totals;
+    return buildPiUsageInfo(response, model, contextWindow, turnTokens);
   }
 
   async #publishCommands(

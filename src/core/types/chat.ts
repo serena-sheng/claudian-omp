@@ -328,6 +328,8 @@ export type StreamChunk =
 export interface UsageInfo {
   model?: string;
   inputTokens: number;
+  /** Output tokens consumed by this turn; omitted when the provider cannot report them. */
+  outputTokens?: number;
   /** Prompt caching: tokens used to create cache entries. Claude-specific; 0 if omitted. */
   cacheCreationInputTokens?: number;
   /** Prompt caching: tokens read from cache. Claude-specific; 0 if omitted. */

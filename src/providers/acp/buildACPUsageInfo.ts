@@ -28,6 +28,7 @@ export function buildACPUsageInfo(params: BuildACPUsageInfoParams): UsageInfo | 
     contextWindow: contextWindowSize,
     inputTokens: promptUsage?.inputTokens ?? 0,
     model: params.model,
+    outputTokens: promptUsage?.outputTokens ?? 0,
     percentage: computePercentage(contextTokens, contextWindowSize),
   };
 }

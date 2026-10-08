@@ -136,7 +136,7 @@ export interface TransformOptions {
   usageState: TransformUsageState;
 }
 
-type PromptUsageField = 'input_tokens' | 'cache_creation_input_tokens' | 'cache_read_input_tokens';
+type PromptUsageField = 'input_tokens' | 'output_tokens' | 'cache_creation_input_tokens' | 'cache_read_input_tokens';
 type StreamDeltaUsage = Extract<SDKPartialAssistantMessage['event'], { type: 'message_delta' }>['usage'];
 /** Assistant/message_start usage and message_delta usage differ only in field nullability. */
 export type PromptUsageSource =
@@ -145,6 +145,7 @@ export type PromptUsageSource =
 
 interface PromptUsageSnapshot {
   inputTokens: number;
+  outputTokens: number;
   cacheCreationInputTokens: number;
   cacheReadInputTokens: number;
   contextTokens: number;
@@ -296,6 +297,7 @@ function selectContextWindowEntry(
 
 const EMPTY_PROMPT_USAGE: PromptUsageSnapshot = {
   inputTokens: 0,
+  outputTokens: 0,
   cacheCreationInputTokens: 0,
   cacheReadInputTokens: 0,
   contextTokens: 0,
@@ -313,10 +315,12 @@ function hasPromptUsageField(usage: PromptUsageSource): boolean {
 
 function toPromptUsageSnapshot(usage: PromptUsageSource): PromptUsageSnapshot {
   const inputTokens = normalizeTokenCount(usage.input_tokens);
+  const outputTokens = normalizeTokenCount(usage.output_tokens);
   const cacheCreationInputTokens = normalizeTokenCount(usage.cache_creation_input_tokens);
   const cacheReadInputTokens = normalizeTokenCount(usage.cache_read_input_tokens);
   return {
     inputTokens,
+    outputTokens,
     cacheCreationInputTokens,
     cacheReadInputTokens,
     contextTokens: inputTokens + cacheCreationInputTokens + cacheReadInputTokens,
@@ -329,10 +333,12 @@ function mergePromptUsage(
 ): PromptUsageSnapshot {
   const next = toPromptUsageSnapshot(usage);
   const inputTokens = Math.max(current.inputTokens, next.inputTokens);
+  const outputTokens = Math.max(current.outputTokens, next.outputTokens);
   const cacheCreationInputTokens = Math.max(current.cacheCreationInputTokens, next.cacheCreationInputTokens);
   const cacheReadInputTokens = Math.max(current.cacheReadInputTokens, next.cacheReadInputTokens);
   return {
     inputTokens,
+    outputTokens,
     cacheCreationInputTokens,
     cacheReadInputTokens,
     contextTokens: inputTokens + cacheCreationInputTokens + cacheReadInputTokens,
@@ -341,6 +347,7 @@ function mergePromptUsage(
 
 function samePromptUsage(a: PromptUsageSnapshot, b: PromptUsageSnapshot): boolean {
   return a.inputTokens === b.inputTokens
+    && a.outputTokens === b.outputTokens
     && a.cacheCreationInputTokens === b.cacheCreationInputTokens
     && a.cacheReadInputTokens === b.cacheReadInputTokens
     && a.contextTokens === b.contextTokens;
@@ -351,6 +358,7 @@ function buildUsageInfo(promptUsage: PromptUsageSnapshot, options: TransformOpti
   return withReportedContextWindow({
     model,
     inputTokens: promptUsage.inputTokens,
+    outputTokens: promptUsage.outputTokens,
     cacheCreationInputTokens: promptUsage.cacheCreationInputTokens,
     cacheReadInputTokens: promptUsage.cacheReadInputTokens,
     contextWindow: 0,
