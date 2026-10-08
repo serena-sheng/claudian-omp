@@ -19,7 +19,13 @@ node_modules/
 
 # Obsidian plugin data
 /data.json
+/data/
 *.obsidian
+
+# Plugin state written next to a vault when developing against this repo
+.claudian-omp/
+.claudian/
+usage.jsonl
 
 # Tooling caches and reports
 .eslintcache

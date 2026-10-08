@@ -14,3 +14,8 @@ env-var isolation, approval-mode values) were taken from it, not its execution
 layer.
 
 Both upstream projects are MIT licensed. See `LICENSE`.
+
+## Modifications in this fork
+
+Copyright (c) 2026 Serena Sheng. The modifications in this repository are released under the
+same MIT license as the upstream projects (see LICENSE).

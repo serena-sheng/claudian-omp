@@ -33,6 +33,25 @@ Providers can also be pointed at other model backends through their own configur
 (for example running Claude Code against a non-Anthropic endpoint), which is covered by
 that CLI's own documentation.
 
+## What this fork adds over upstream Claudian
+
+- **Two extra agent harnesses**: Oh My Pi (OMP) and DeepSeek Harness.
+- **Provider readiness panel** at the top of every provider's settings tab: is it enabled,
+  is the CLI installed and which version, was a model catalog discovered, is a model
+  selected — each with a hint on what to do next. Install and update commands are shown for
+  you to copy; the plugin never runs them.
+- **Provider capability matrix**: which harness supports images, forking, rewind, turn
+  steering, plan approval, instruction mode, provider commands and reasoning control, read
+  live from the providers rather than from a table that can go stale.
+- **Token usage meter**: per-turn consumption recorded locally and shown by day and by
+  session, in Settings, General.
+- **Instruction mode** (opt-in): type `#` in an empty composer and a rough instruction is
+  rewritten into a proper prompt, asking a clarifying question first when it needs one.
+- **Inline plan approval**: where a provider reports plan mode, exiting it renders a card
+  you can approve or reject.
+- **Composer bash mode** (opt-in): type `!` to run a shell command and see its output in the
+  transcript.
+
 ## Disclosures
 
 Required by the Obsidian developer policies, and true as of this fork:
@@ -54,6 +73,10 @@ Required by the Obsidian developer policies, and true as of this fork:
   yourself, in your vault, through your own shell — the same thing you could do in a
   terminal. It is off by default; output is capped at 1 MiB and commands are killed
   after 30 seconds. Nothing here is model-driven: it only runs what you type after `!`.
+- **What is stored locally.** The plugin keeps its settings, session metadata and token
+  usage log inside your vault, under `.claudian-omp/`. The usage log records, per turn, the
+  conversation id, provider, model and token counts — never message content — and is
+  trimmed to 90 days. Nothing is uploaded anywhere by the plugin itself.
 - **Paid services.** Some providers require a paid subscription or API key. The plugin
   does not sell anything and does not install or update any CLI for you.
 - **Desktop only.** `isDesktopOnly` is true: the plugin spawns subprocesses through Node
@@ -70,8 +93,9 @@ out, install it manually or via BRAT:
 2. Put them in `YOUR_VAULT/.obsidian/plugins/claudian-omp/`.
 3. Enable **Claudian OMP** in Settings, Community plugins.
 
-Do not enable this plugin and the upstream **Claudian** at the same time: they would both
-register a chat view and would fight over the same storage.
+This fork registers its own view type and keeps its own `.claudian-omp/` storage, so it can
+sit next to upstream **Claudian** without either one registering the same view or
+overwriting the other's settings. Install whichever you want to use.
 
 ## Building
 

@@ -1,6 +1,6 @@
 {
-  "name": "claudian",
-  "version": "1.2.0",
+  "name": "claudian-omp",
+  "version": "1.2.1",
   "description": "Claudian fork that adds the Oh My Pi OMP harness and DeepSeek Harness alongside Claude Code, Codex, Grok, OpenCode and Pi. Your vault becomes their working directory for file reads, writes, search, bash commands and multi-step workflows.",
   "main": "main.js",
   "engines": {
@@ -34,7 +34,7 @@
     "productivity",
     "ide"
   ],
-  "author": "Yishen Tu",
+  "author": "Serena Sheng",
   "license": "MIT",
   "devDependencies": {
     "@eslint-community/eslint-plugin-eslint-comments": "^4.7.2",
@@ -88,5 +88,17 @@
     "js-yaml": "4.3.2",
     "moment": "2.31.0",
     "qs": "6.16.0"
+  },
+  "contributors": [
+    "Yishen Tu (upstream Claudian)",
+    "Lee (oh-my-claudian)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/serena-sheng/claudian-omp.git"
+  },
+  "homepage": "https://github.com/serena-sheng/claudian-omp#readme",
+  "bugs": {
+    "url": "https://github.com/serena-sheng/claudian-omp/issues"
   }
 }
