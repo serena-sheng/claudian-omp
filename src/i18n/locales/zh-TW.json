@@ -108,6 +108,17 @@
         "accept": "填入輸入框",
         "preview": "預覽"
       }
+    },
+    "planApproval": {
+      "header": "計畫已就緒，等待核准",
+      "prompt": "核准後 agent 將開始實作該計畫；拒絕則請它先修改計畫。",
+      "approve": "核准",
+      "reject": "拒絕",
+      "approved": "已核准，已通知 agent 開始實作計畫。",
+      "rejected": "已拒絕，已通知 agent 修改計畫。",
+      "noDetails": "本次工具呼叫沒有附上計畫詳情。",
+      "approveMessage": "核准，請依計畫開始實作。",
+      "rejectMessage": "請先修改計畫再實作。"
     }
   },
   "settings": {

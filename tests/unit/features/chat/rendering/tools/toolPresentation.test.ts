@@ -8,6 +8,7 @@ import {
   getToolName,
   getToolSummary,
 } from '@/features/chat/rendering/tools/toolPresentation';
+import { t } from '@/i18n/i18n';
 
 jest.mock('obsidian', () => ({
   Platform: { resourcePathPrefix: 'app://local/' },
@@ -154,7 +155,7 @@ describe('toolPresentation', () => {
 
     it('should return plan mode labels', () => {
       expect(getToolName('EnterPlanMode', {})).toBe('Entering plan mode');
-      expect(getToolName('ExitPlanMode', {})).toBe('Plan complete');
+      expect(getToolName('ExitPlanMode', {})).toBe(t('chat.planApproval.header'));
     });
   });
 

@@ -1,10 +1,11 @@
-import { createFixture, deferred } from '@test/helpers/ChatInputHarness';
+import { createFixture, deferred, waitForCall } from '@test/helpers/ChatInputHarness';
 import { Notice } from 'obsidian';
 
 import { ProviderRegistry } from '@/core/providers/ProviderRegistry';
 import type { ToolCallInfo } from '@/core/types';
 import type { ChatSteerOutcome } from '@/features/chat/execution/ChatExecutionCoordinator';
 import { ChatExecutionPreHandoffError } from '@/features/chat/execution/ChatExecutionCoordinator';
+import { t } from '@/i18n/i18n';
 
 jest.mock('@/core/providers/ProviderRegistry', () => ({
   ProviderRegistry: {
@@ -260,5 +261,31 @@ describe('async question answer submission', () => {
     await expect(fixture.controller.answerQuestion(tool, { '0': 'Answer' }, 'conversation-1')).rejects.toThrow('not sent');
     expect(fixture.coordinator.execute).not.toHaveBeenCalled();
     expect(fixture.state.queuedMessage).toBeNull();
+  });
+});
+
+describe('InputController plan approval', () => {
+  it('sends the approval message as a normal user turn', async () => {
+    const fixture = createFixture();
+
+    fixture.controller.submitPlanApproval('approve');
+    await waitForCall(fixture.coordinator.execute);
+
+    const content = t('chat.planApproval.approveMessage');
+    expect(fixture.coordinator.execute.mock.calls[0][0]).toEqual(expect.objectContaining({ canonicalText: content }));
+    expect(fixture.state.messages.find(message => message.role === 'user'))
+      .toEqual(expect.objectContaining({ content, displayContent: content }));
+  });
+
+  it('sends the rejection message as a normal user turn', async () => {
+    const fixture = createFixture();
+
+    fixture.controller.submitPlanApproval('reject');
+    await waitForCall(fixture.coordinator.execute);
+
+    const content = t('chat.planApproval.rejectMessage');
+    expect(fixture.coordinator.execute.mock.calls[0][0]).toEqual(expect.objectContaining({ canonicalText: content }));
+    expect(fixture.state.messages.find(message => message.role === 'user'))
+      .toEqual(expect.objectContaining({ content, displayContent: content }));
   });
 });

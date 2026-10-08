@@ -35,6 +35,7 @@ import {
 import type { ToolCallInfo } from '@/core/types';
 import { getApplyPatchSummary, renderApplyPatchExpanded, setApplyPatchStatus } from '@/features/chat/rendering/tools/applyPatchContent';
 import { renderAskUserQuestionContent } from '@/features/chat/rendering/tools/askUserQuestionContent';
+import { type PlanApprovalRenderContext, renderPlanApprovalContent } from '@/features/chat/rendering/tools/planApprovalContent';
 import { getScriptLanguage, getScriptSummary, renderScriptContent } from '@/features/chat/rendering/tools/scriptContent';
 import { getCurrentTaskText, getTodoLabel, getTodoName, renderTodoWriteContent, setTodoWriteStatus } from '@/features/chat/rendering/tools/todoContent';
 import {
@@ -58,6 +59,7 @@ import {
 } from '@/features/chat/rendering/tools/toolExpandedContent';
 import { setToolStatus } from '@/features/chat/rendering/tools/toolStatus';
 import { getWebSearchLabel, getWebSearchSummary, renderWebSearchExpanded } from '@/features/chat/rendering/tools/webSearchContent';
+import { t } from '@/i18n/i18n';
 
 /** Neutral tool fields the expanded view can present. */
 export type ExpandedToolContent = Pick<
@@ -84,7 +86,7 @@ interface ToolPresentation {
   /** Tool-card placeholder while a live card awaits its result; defaults to the pending text. */
   pendingBody?: (container: HTMLElement, tool: ToolCallInfo, pendingText: string) => void;
   /** Tool-card body that replaces the expanded body and renders before first expansion. */
-  cardBody?: (container: HTMLElement, tool: ToolCallInfo, pending: boolean) => void;
+  cardBody?: (container: HTMLElement, tool: ToolCallInfo, pending: boolean, context?: PlanApprovalRenderContext) => void;
   /** Tool-card header status; defaults to the tool status icon. */
   status?: (statusEl: HTMLElement, tool: ToolCallInfo, pending: boolean) => void;
   /** Tool-card header detail, hidden with the status while expanded. */
@@ -239,7 +241,10 @@ const TOOL_PRESENTATIONS: ReadonlyMap<string, ToolPresentation> = new Map<string
     cardBody: renderAskUserQuestionContent,
   }],
   [TOOL_ENTER_PLAN_MODE, { name: () => 'Entering plan mode' }],
-  [TOOL_EXIT_PLAN_MODE, { name: () => 'Plan complete' }],
+  [TOOL_EXIT_PLAN_MODE, {
+    name: () => t('chat.planApproval.header'),
+    cardBody: (container, tool, _pending, context) => renderPlanApprovalContent(container, tool, context),
+  }],
   [TOOL_APPLY_PATCH, {
     summary: getApplyPatchSummary,
     body: (container, tool) => renderApplyPatchExpanded(container, tool.input, tool.result),
@@ -304,10 +309,15 @@ export function renderExpandedContent(
 }
 
 /** Tool-card body; a pending card shows `pendingText` until its first result arrives. */
-export function renderToolCardContent(container: HTMLElement, tool: ToolCallInfo, pendingText?: string): void {
+export function renderToolCardContent(
+  container: HTMLElement,
+  tool: ToolCallInfo,
+  pendingText?: string,
+  context?: PlanApprovalRenderContext,
+): void {
   const presentation = getToolPresentation(tool.name);
   if (presentation.cardBody) {
-    presentation.cardBody(container, tool, pendingText !== undefined);
+    presentation.cardBody(container, tool, pendingText !== undefined, context);
   } else if (pendingText === undefined) {
     renderExpandedContent(container, tool);
   } else if (presentation.pendingBody) {

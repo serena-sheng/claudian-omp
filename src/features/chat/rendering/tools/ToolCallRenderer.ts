@@ -1,6 +1,7 @@
 import { TOOL_BASH } from '@/core/tools/toolNames';
 import type { ToolCallInfo } from '@/core/types';
 import { setupCollapsible } from '@/features/chat/rendering/collapsible';
+import { type PlanApprovalPort } from '@/features/chat/rendering/tools/planApprovalContent';
 import { setToolIcon } from '@/features/chat/rendering/tools/toolContentPrimitives';
 import {
   getToolLabel,
@@ -13,6 +14,8 @@ import { setToolStatus } from '@/features/chat/rendering/tools/toolStatus';
 
 export interface ToolCallRenderOptions {
   initiallyExpanded?: boolean;
+  /** Approval channel for cards that collect a user decision, such as a plan exit. */
+  planApproval?: PlanApprovalPort;
 }
 
 interface ToolCardOptions {
@@ -21,6 +24,7 @@ interface ToolCardOptions {
   initiallyExpanded?: boolean;
   /** Render the body before first expansion (cards with a card body always do). */
   eagerWhen?: boolean;
+  planApproval?: PlanApprovalPort;
 }
 
 type ToolCardUpdate = (tool: ToolCallInfo) => void;
@@ -70,7 +74,7 @@ function createToolCard(parentEl: HTMLElement, tool: ToolCallInfo, options: Tool
   const renderContent = () => {
     if (!dirty) return;
     content.empty();
-    renderToolCardContent(content, currentTool, pendingText);
+    renderToolCardContent(content, currentTool, pendingText, { planApproval: options.planApproval });
     dirty = false;
   };
   if (eager || initiallyExpanded || options.eagerWhen) renderContent();
@@ -110,6 +114,7 @@ export function renderToolCall(
   const toolEl = createToolCard(parentEl, toolCall, {
     initialText: 'Running...',
     initiallyExpanded: options.initiallyExpanded,
+    planApproval: options.planApproval,
   });
   return toolEl;
 }
@@ -128,5 +133,6 @@ export function renderStoredToolCall(
   return createToolCard(parentEl, toolCall, {
     initiallyExpanded: options.initiallyExpanded,
     eagerWhen: toolCall.status === 'running',
+    planApproval: options.planApproval,
   });
 }

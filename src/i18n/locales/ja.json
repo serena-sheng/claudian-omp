@@ -108,6 +108,17 @@
         "accept": "Use prompt",
         "preview": "Preview"
       }
+    },
+    "planApproval": {
+      "header": "Plan ready for approval",
+      "prompt": "Approve this plan to start implementing it, or reject to ask for changes.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "approved": "Approved. The agent has been asked to implement the plan.",
+      "rejected": "Rejected. The agent has been asked to revise the plan.",
+      "noDetails": "This tool call did not include the plan details.",
+      "approveMessage": "Implement the plan.",
+      "rejectMessage": "Please revise the plan before implementing."
     }
   },
   "settings": {

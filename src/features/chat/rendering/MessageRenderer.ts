@@ -11,6 +11,7 @@ import { getResponseSegments } from '@/features/chat/rendering/NotificationBound
 import { ResponseFinalizer } from '@/features/chat/rendering/ResponseFinalizer';
 import { createResponseTextBlock } from '@/features/chat/rendering/ResponseLayout';
 import { renderStoredThinkingBlock } from '@/features/chat/rendering/ThinkingBlockRenderer';
+import type { PlanApprovalPort } from '@/features/chat/rendering/tools/planApprovalContent';
 import { updateToolCallResult } from '@/features/chat/rendering/tools/ToolCallRenderer';
 import { isSilentWriteStdinTool, renderToolCard } from '@/features/chat/rendering/tools/toolCardDispatch';
 import { createWelcomeElement } from '@/features/chat/rendering/WelcomeRenderer';
@@ -33,6 +34,7 @@ export class MessageRenderer {
   private readonly plugin: ChatFeatureHost;
   private readonly messagesEl: HTMLElement;
   private readonly getCapabilities: () => ProviderCapabilities;
+  private readonly planApproval?: PlanApprovalPort;
   private readonly messageEls = new Map<string, HTMLElement>();
   private removeFileLinkHandler: () => void;
   private readonly imagePreviewModal = new ImagePreviewModal();
@@ -57,10 +59,12 @@ export class MessageRenderer {
     forkCallback?: MessageActionCallbacks['fork'],
     getCapabilities?: () => ProviderCapabilities,
     branchActions?: MessageActionCallbacks['branches'],
+    planApproval?: PlanApprovalPort,
   ) {
     this.app = plugin.app;
     this.plugin = plugin;
     this.messagesEl = messagesEl;
+    this.planApproval = planApproval;
     this.getCapabilities = getCapabilities ?? (() => ({
       providerId: DEFAULT_CHAT_PROVIDER_ID,
       supportsNativeHistory: false,
@@ -422,6 +426,7 @@ export class MessageRenderer {
     } else {
       renderToolCard(contentEl, toolCall, {
         mode: 'stored', expandFileEditsByDefault: this.plugin.settings?.expandFileEditsByDefault === true,
+        planApproval: this.planApproval,
       });
     }
   }
@@ -486,7 +491,7 @@ export class MessageRenderer {
   ): void {
     const subagentAdapter = this.#resolveSubagentAdapter(spawnToolCall.name);
     if (!subagentAdapter || subagentAdapter.protocol !== 'lifecycle') {
-      renderToolCard(contentEl, spawnToolCall, { mode: 'stored', expandFileEditsByDefault: this.plugin.settings?.expandFileEditsByDefault === true });
+      renderToolCard(contentEl, spawnToolCall, { mode: 'stored', expandFileEditsByDefault: this.plugin.settings?.expandFileEditsByDefault === true, planApproval: this.planApproval });
       return;
     }
 

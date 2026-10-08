@@ -15,6 +15,7 @@ import {
   finalizeThinkingBlock,
   type ThinkingBlockState,
 } from '@/features/chat/rendering/ThinkingBlockRenderer';
+import type { PlanApprovalPort } from '@/features/chat/rendering/tools/planApprovalContent';
 import type { ChatState } from '@/features/chat/state/ChatState';
 import type { AsyncSubagentHistoryRecovery } from '@/features/chat/subagents/AsyncSubagentHistoryRecovery';
 import type { SubagentManager } from '@/features/chat/subagents/SubagentManager';
@@ -40,6 +41,8 @@ export interface StreamControllerDeps {
   getProviderId?: () => ProviderId;
   /** Recovers finished async subagents from provider history; absent when the owner has none. */
   asyncSubagentHistoryRecovery?: AsyncSubagentHistoryRecovery;
+  /** Approval channel for tool cards that collect a user decision, such as a plan exit. */
+  planApproval?: PlanApprovalPort;
 }
 
 interface StreamingContentSnapshot {
@@ -83,6 +86,7 @@ export class StreamController {
       getMessagesEl: deps.getMessagesEl,
       scrollToBottom,
       onQuestionToolChanged: deps.onQuestionToolChanged,
+      planApproval: deps.planApproval,
     });
     this.subagents = new SubagentStreamRouter({
       state: deps.state,

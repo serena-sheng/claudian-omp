@@ -31,6 +31,7 @@ import { AsyncQuestionPrompts } from '@/features/chat/interactions/AsyncQuestion
 import type { InlineInteractionPrompts } from '@/features/chat/interactions/InlineInteractionPrompts';
 import type { LinkedContentController } from '@/features/chat/linked-content';
 import type { MessageRenderer } from '@/features/chat/rendering/MessageRenderer';
+import type { PlanApprovalDecision } from '@/features/chat/rendering/tools/planApprovalContent';
 import type { SideChatController } from '@/features/chat/side-chat/SideChatController';
 import type { ChatState } from '@/features/chat/state/ChatState';
 import { cloneChatTurnRequest, createQueuedMessage } from '@/features/chat/state/chatTurnRequest';
@@ -236,6 +237,14 @@ export class InputController {
 
   updateAsyncQuestion(tool: ToolCallInfo): void {
     this.asyncQuestions.update(tool);
+  }
+
+  /** Sends an inline plan approval or rejection through the tab's ordinary message channel. */
+  submitPlanApproval(decision: PlanApprovalDecision): void {
+    const content = decision === 'approve'
+      ? t('chat.planApproval.approveMessage')
+      : t('chat.planApproval.rejectMessage');
+    void this.sendMessage({ destination: 'main', content, images: [] });
   }
 
   async answerQuestion(tool: ToolCallInfo, answers: AskUserAnswers, conversationId: string | null, signal?: AbortSignal): Promise<void> {

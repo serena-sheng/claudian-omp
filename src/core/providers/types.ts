@@ -43,6 +43,8 @@ export interface ProviderCapabilities {
   supportsFastMode?: boolean;
   /** Composer instruction mode can refine drafts through auxiliary execution. */
   supportsInstructionMode?: boolean;
+  /** Provider exposes plan mode, so plan exits render an inline approval card. */
+  supportsPlanMode?: boolean;
   supportsResponseThroughput?: boolean;
   reasoningControl: 'effort' | 'none';
 }

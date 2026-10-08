@@ -11,6 +11,7 @@ import { extractToolResultContent } from '@/core/tools/toolResultContent';
 import { applyToolResultPresentation } from '@/core/tools/toolResultDetails';
 import type { ChatMessage, StreamChunk, ToolCallInfo } from '@/core/types';
 import type { ChatFeatureHost } from '@/features/chat/ChatFeatureHost';
+import type { PlanApprovalPort } from '@/features/chat/rendering/tools/planApprovalContent';
 import { updateToolCallResult } from '@/features/chat/rendering/tools/ToolCallRenderer';
 import { isSilentWriteStdinTool, renderToolCard } from '@/features/chat/rendering/tools/toolCardDispatch';
 import { getToolName, getToolSummary } from '@/features/chat/rendering/tools/toolPresentation';
@@ -101,6 +102,8 @@ export interface ToolCallStreamDeps {
   getMessagesEl: () => HTMLElement;
   scrollToBottom: () => void;
   onQuestionToolChanged?: (tool: ToolCallInfo) => void;
+  /** Approval channel for tool cards that collect a user decision, such as a plan exit. */
+  planApproval?: PlanApprovalPort;
 }
 
 /**
@@ -290,6 +293,7 @@ export class ToolCallStream {
     if (!parentEl) return;
     const { element, writeEditState } = renderToolCard(parentEl, toolCall, {
       mode: 'live', expandFileEditsByDefault: this.deps.plugin.settings.expandFileEditsByDefault === true,
+      planApproval: this.deps.planApproval,
     });
     state.toolCallElements.set(toolId, element);
     if (writeEditState) state.writeEditStates.set(toolId, writeEditState);
@@ -309,6 +313,7 @@ export class ToolCallStream {
     const { element: replacementEl, writeEditState } = renderToolCard(parentEl, toolCall, {
       mode: 'live', expandFileEditsByDefault: this.deps.plugin.settings.expandFileEditsByDefault === true,
       initiallyExpanded: toolCall.isExpanded === true,
+      planApproval: this.deps.planApproval,
     });
     state.toolCallElements.set(toolCall.id, replacementEl);
     if (writeEditState) state.writeEditStates.set(toolCall.id, writeEditState);

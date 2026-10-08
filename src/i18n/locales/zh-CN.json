@@ -108,6 +108,17 @@
         "accept": "填入输入框",
         "preview": "预览"
       }
+    },
+    "planApproval": {
+      "header": "计划已就绪，等待批准",
+      "prompt": "批准后 agent 将开始实施该计划；拒绝则请它先修改计划。",
+      "approve": "批准",
+      "reject": "拒绝",
+      "approved": "已批准，已通知 agent 开始实施计划。",
+      "rejected": "已拒绝，已通知 agent 修改计划。",
+      "noDetails": "本次工具调用没有附带计划详情。",
+      "approveMessage": "批准，请按计划开始实施。",
+      "rejectMessage": "请先修改计划再实施。"
     }
   },
   "settings": {

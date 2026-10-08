@@ -20,6 +20,7 @@ import { SelectionController } from '@/features/chat/input/SelectionController';
 import { InlineInteractionPrompts } from '@/features/chat/interactions/InlineInteractionPrompts';
 import { NavigationController } from '@/features/chat/navigation/NavigationController';
 import { MessageRenderer } from '@/features/chat/rendering/MessageRenderer';
+import type { PlanApprovalDecision, PlanApprovalPort } from '@/features/chat/rendering/tools/planApprovalContent';
 import { SideChatController } from '@/features/chat/side-chat/SideChatController';
 import { AsyncSubagentHistoryRecovery } from '@/features/chat/subagents/AsyncSubagentHistoryRecovery';
 import type { TabManagerViewHost } from '@/features/chat/tabs/ChatTab';
@@ -68,6 +69,16 @@ export function buildTabRuntimeControllers(
   const viewHost = component as Partial<TabManagerViewHost>;
   const owningLeaf = viewHost.leaf;
   const { dom, state } = shell;
+
+  // Plan approvals render inside their plan-mode tool card; the send itself stays owned
+  // by this tab's input controller, bound once it exists. A provider without plan mode
+  // leaves the port unsupported, so the card never offers the actions.
+  let submitPlanApproval: ((decision: PlanApprovalDecision) => void) | null = null;
+  const planApproval: PlanApprovalPort = {
+    isSupported: () => getTabCapabilities(runtimeRef.requirePublished(), plugin).supportsPlanMode === true,
+    submit: decision => submitPlanApproval?.(decision),
+  };
+
   const ensureExecutionInitialized = async (): Promise<boolean> => {
     const tab = runtimeRef.requirePublished();
     if (
@@ -111,6 +122,7 @@ export function buildTabRuntimeControllers(
       navigate: (id, branchId) => runtimeRef.requirePublished().controllers.conversationController.navigateBranch(id, branchId),
       isBusy: () => !shell.session.canNavigateConversation,
     },
+    planApproval,
   );
   options.registerCleanup('tab message renderer', () => renderer.dispose());
 
@@ -204,6 +216,7 @@ export function buildTabRuntimeControllers(
     ),
     getProviderId,
     asyncSubagentHistoryRecovery,
+    planApproval,
   });
   options.registerCleanup('tab stream controller', () => streamController.dispose());
   const inlinePrompts = new InlineInteractionPrompts({
@@ -418,6 +431,7 @@ export function buildTabRuntimeControllers(
     captureReviewableSettlement: shell.captureReviewableSettlement ?? undefined,
   });
   options.registerCleanup('tab instruction refine', () => inputController.cancelInstructionRefinement());
+  submitPlanApproval = decision => inputController.submitPlanApproval(decision);
   const navigationController = new NavigationController({
     getMessagesEl: () => dom.messagesEl,
     getInputEl: () => dom.inputEl,

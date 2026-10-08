@@ -10,5 +10,6 @@ export const GROK_PROVIDER_CAPABILITIES: Readonly<ProviderCapabilities> = Object
   supportsProviderCommands: true,
   supportsImageAttachments: true,
   supportsTurnSteer: true,
+  supportsPlanMode: true,
   reasoningControl: 'effort',
 });

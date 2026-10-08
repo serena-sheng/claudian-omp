@@ -25,6 +25,13 @@ export const TOOL_WRITE = 'Write' as const;
 export const TOOL_ENTER_PLAN_MODE = 'EnterPlanMode' as const;
 export const TOOL_EXIT_PLAN_MODE = 'ExitPlanMode' as const;
 
+export const PLAN_MODE_TOOLS = [TOOL_ENTER_PLAN_MODE, TOOL_EXIT_PLAN_MODE] as const;
+export type PlanModeToolName = (typeof PLAN_MODE_TOOLS)[number];
+
+export function isPlanModeTool(name: string): name is PlanModeToolName {
+  return (PLAN_MODE_TOOLS as readonly string[]).includes(name);
+}
+
 // Runtime-managed tools exposed through provider adapters.
 export const TOOL_EXEC = 'exec' as const;
 export const TOOL_GENERATE_IMAGE = 'GenerateImage' as const;

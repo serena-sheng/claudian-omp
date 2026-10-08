@@ -37,11 +37,15 @@ that CLI's own documentation.
 
 Required by the Obsidian developer policies, and true as of this fork:
 
-- **Network use.** The plugin itself does not call the network. The agent CLIs it launches
-  do: they talk to their own model providers (Anthropic, OpenAI, xAI, DeepSeek, …) and to
-  any MCP servers you configure. Which services are contacted, and with which credentials,
-  is determined by those CLIs and by the environment variables you set in each provider's
-  settings.
+- **Network use.** By default the plugin itself makes no network requests. The agent CLIs
+  it launches do: they talk to their own model providers (Anthropic, OpenAI, xAI, DeepSeek,
+  …) and to any MCP servers you configure. Which services are contacted, and with which
+  credentials, is determined by those CLIs and by the environment variables you set in each
+  provider's settings.
+  There is exactly one optional exception: if you turn on **Check for CLI updates**, the
+  plugin queries `https://registry.npmjs.org` (public npm registry, no identifiers sent
+  beyond the package names) to tell you when an installed CLI has a newer release. It is
+  off by default and can be turned off again at any time.
 - **Files outside the vault.** Each agent CLI is started with your vault as its working
   directory, but the CLIs may read and write outside it (their own config, credentials,
   session stores and caches; OMP uses `~/.omp`, Pi uses `~/.pi`, DeepSeek Harness uses
