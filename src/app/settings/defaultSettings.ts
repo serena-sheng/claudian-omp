@@ -37,6 +37,7 @@ export const DEFAULT_CLAUDIAN_SETTINGS: ClaudianSettings = {
   },
   requireCommandOrControlEnterToSend: false,
   enableInstructionMode: false,
+  enableBangBash: false,
 
   locale: 'en',
 

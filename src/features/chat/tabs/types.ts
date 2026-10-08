@@ -2,6 +2,7 @@ import type { ProviderCommandDropdownConfig } from '@/core/providers/commands/Pr
 import type { ProviderCommandDiscoveryController } from '@/core/providers/commands/ProviderCommandDiscoveryStore';
 import type { ProviderCommandEntry } from '@/core/providers/commands/ProviderCommandEntry';
 import type { ProviderId, TitleGenerationService } from '@/core/providers/types';
+import type { BangBashModeManager } from '@/features/chat/composer/BangBashModeManager';
 import type { ComposerContextTray } from '@/features/chat/composer/ComposerContextTray';
 import type { ComposerPromptSuggestion } from '@/features/chat/composer/ComposerPromptSuggestion';
 import type { FileContextManager } from '@/features/chat/composer/FileContextManager';
@@ -92,6 +93,8 @@ export interface TabServices {
 export interface TabUIComponents {
   readonly promptSuggestion: ComposerPromptSuggestion;
   readonly instructionModeManager: InstructionModeManager;
+  /** Composer bash mode; inert unless the setting is on and the vault path is known. */
+  readonly bangBashModeManager: BangBashModeManager;
   readonly contextTray: ComposerContextTray;
   readonly fileContextManager: FileContextManager;
   readonly linkedContentController: LinkedContentController;

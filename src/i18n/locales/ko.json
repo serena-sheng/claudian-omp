@@ -109,6 +109,13 @@
         "preview": "Preview"
       }
     },
+    "bangBash": {
+      "placeholder": "! 자신의 shell 에서 명령을 실행합니다. 출력은 이 대화에 추가됩니다",
+      "running": "실행 중…",
+      "timeout": "명령이 30초 후에 시간 초과되었습니다",
+      "outputLimit": "출력이 1 MB를 초과하여 잘렸습니다",
+      "exitCode": "종료 코드 {code}"
+    },
     "planApproval": {
       "header": "Plan ready for approval",
       "prompt": "Approve this plan to start implementing it, or reject to ask for changes.",
@@ -223,6 +230,10 @@
     "instructionMode": {
       "name": "Instruction mode",
       "desc": "Type # in an empty composer to refine a rough instruction into a polished prompt before sending."
+    },
+    "bangBash": {
+      "name": "Bash 모드",
+      "desc": "빈 입력창에서 ! 를 입력하면 Bash 모드로 들어가 자신의 shell 로 vault 에서 명령을 하나 실행합니다. 명령 출력은 이 대화에 추가됩니다."
     },
     "navMappings": {
       "name": "Vim 스타일 네비게이션 매핑",

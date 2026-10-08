@@ -109,6 +109,13 @@
         "preview": "Preview"
       }
     },
+    "bangBash": {
+      "placeholder": "! Executa um comando no seu próprio shell; a saída é adicionada a esta conversa",
+      "running": "Executando…",
+      "timeout": "Comando interrompido após 30 s",
+      "outputLimit": "Saída truncada em 1 MB",
+      "exitCode": "Código de saída {code}"
+    },
     "planApproval": {
       "header": "Plan ready for approval",
       "prompt": "Approve this plan to start implementing it, or reject to ask for changes.",
@@ -223,6 +230,10 @@
     "instructionMode": {
       "name": "Instruction mode",
       "desc": "Type # in an empty composer to refine a rough instruction into a polished prompt before sending."
+    },
+    "bangBash": {
+      "name": "Modo Bash",
+      "desc": "Digite ! no campo vazio para executar um comando do vault no seu próprio shell. A saída do comando é adicionada à conversa."
     },
     "navMappings": {
       "name": "Mapeamentos de navegação estilo Vim",

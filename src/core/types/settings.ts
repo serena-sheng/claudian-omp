@@ -149,6 +149,8 @@ export interface ClaudianSettings {
   requireCommandOrControlEnterToSend: boolean;
   /** Type # in an empty composer to refine a rough instruction before sending. */
   enableInstructionMode: boolean;
+  /** Type ! in an empty composer to run one shell command in the vault through the user's own shell. */
+  enableBangBash: boolean;
 
   // Internationalization
   locale: string;

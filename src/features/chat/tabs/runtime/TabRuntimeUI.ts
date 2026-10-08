@@ -1,5 +1,6 @@
 import { Notice } from 'obsidian';
 
+import { getEnhancedPath } from '@/core/process/env';
 import { getHiddenCommandSet } from '@/core/providers/commands/hiddenCommands';
 import {
   getProviderSettingsSnapshotWithModel,
@@ -15,6 +16,7 @@ import type {
   ProviderId,
 } from '@/core/providers/types';
 import { getChatSettingsSnapshot } from '@/features/chat/ChatSettings';
+import { BangBashModeManager } from '@/features/chat/composer/BangBashModeManager';
 import { ComposerContextTray } from '@/features/chat/composer/ComposerContextTray';
 import { ComposerInfoRow } from '@/features/chat/composer/ComposerInfoRow';
 import { ComposerPromptSuggestion } from '@/features/chat/composer/ComposerPromptSuggestion';
@@ -24,6 +26,8 @@ import { InstructionModeManager } from '@/features/chat/composer/InstructionMode
 import { MainChatComposerDropdown } from '@/features/chat/composer/MainChatComposerDropdown';
 import { installTextareaSizing } from '@/features/chat/composer/textareaSizing';
 import { createInputToolbar } from '@/features/chat/composer/toolbar/InputToolbar';
+import { BangBashRunner } from '@/features/chat/input/BangBashRunner';
+import { BangBashService } from '@/features/chat/input/BangBashService';
 import { LinkedContentController } from '@/features/chat/linked-content';
 import { NavigationSidebar } from '@/features/chat/navigation/NavigationSidebar';
 import type { SideChatController } from '@/features/chat/side-chat/SideChatController';
@@ -39,12 +43,14 @@ import { TabModelSelectionCoordinator } from '@/features/chat/tabs/TabModelSelec
 import { syncTabProviderServices } from '@/features/chat/tabs/tabProviderLifecycle';
 import { getBlankTabModelOptions, getTabCapabilities, getTabChatUIConfig, getTabSelectedModel, getTabSettingsSnapshot, type TabSettingsSnapshot, updateTabProviderSettings, updateTabReasoning } from '@/features/chat/tabs/tabProviderSettings';
 import { applyProviderUIGating, refreshTabProviderUI, syncComposerDropdownForProvider, updateTabPermissionMode, updateTabServiceTier } from '@/features/chat/tabs/tabProviderUI';
+import { createTabMessageId } from '@/features/chat/tabs/TabSessionEvents';
 import type {
   ProviderCatalogInfo,
   TabServices,
   TabUIComponents,
 } from '@/features/chat/tabs/types';
 import { t } from '@/i18n/i18n';
+import { getVaultPath } from '@/utils/path';
 
 function buildContextManagers(
   options: TabRuntimeConstructionContext,
@@ -435,6 +441,31 @@ export function buildTabRuntimeUI(
   );
   options.registerCleanup('tab instruction mode', () => instructionModeManager.destroy());
 
+  // Bash mode: `!` on an empty composer runs one shell command in the vault and
+  // reports it through the tab transcript. The runner needs the vault path and
+  // an enhanced PATH, so the mode stays inert when either is unavailable.
+  const vaultPath = getVaultPath(plugin.app);
+  const bangBashRunner = vaultPath
+    ? new BangBashRunner({
+      service: new BangBashService(vaultPath, getEnhancedPath()),
+      createMessageId: createTabMessageId,
+      getTranscript: () => {
+        const tab = runtimeRef.current();
+        return tab ? { state: tab.state, renderer: tab.renderer } : null;
+      },
+    })
+    : null;
+  const bangBashModeManager = new BangBashModeManager(dom.inputEl, {
+    isEnabled: () => plugin.settings.enableBangBash === true && bangBashRunner !== null,
+    getInputWrapper: () => dom.inputWrapper,
+    shouldSubmitOnEnter: event => shouldSendMessageFromEnterKey(event, plugin.settings),
+    restorePlaceholder: () => {
+      runtimeRef.current()?.controllers.sideChatController.restoreComposerPlaceholder();
+    },
+    onSubmit: command => (bangBashRunner ? bangBashRunner.run(command) : Promise.resolve()),
+  });
+  options.registerCleanup('tab bang bash mode', () => bangBashModeManager.destroy());
+
   const ui: TabUIComponents = {
     promptSuggestion: new ComposerPromptSuggestion(dom.inputEl, () => {
       const tab = runtimeRef.current();
@@ -444,6 +475,7 @@ export function buildTabRuntimeUI(
         && !tab.controllers.builtInCommandController.isResumeDropdownVisible();
     }, dom.inputContainerEl),
     instructionModeManager,
+    bangBashModeManager,
     contextTray,
     ...contextManagers,
     modelSelector: toolbar.modelSelector,

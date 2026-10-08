@@ -109,6 +109,13 @@
         "preview": "Preview"
       }
     },
+    "bangBash": {
+      "placeholder": "! 自分の shell でコマンドを実行します。出力はこの会話に追加されます",
+      "running": "実行中…",
+      "timeout": "コマンドは 30 秒でタイムアウトしました",
+      "outputLimit": "出力が 1 MB を超えたため切り詰めました",
+      "exitCode": "終了コード {code}"
+    },
     "planApproval": {
       "header": "Plan ready for approval",
       "prompt": "Approve this plan to start implementing it, or reject to ask for changes.",
@@ -223,6 +230,10 @@
     "instructionMode": {
       "name": "Instruction mode",
       "desc": "Type # in an empty composer to refine a rough instruction into a polished prompt before sending."
+    },
+    "bangBash": {
+      "name": "Bash モード",
+      "desc": "空の入力欄で ! を押すと Bash モードに入り、自分の shell で vault 内のコマンドを 1 つ実行します。コマンドの出力はこの会話に追加されます。"
     },
     "navMappings": {
       "name": "Vimスタイルナビゲーションマッピング",

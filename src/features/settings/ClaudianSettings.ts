@@ -617,6 +617,19 @@ export class ClaudianSettingTab extends PluginSettingTab {
       });
 
     new Setting(container)
+      .setName(t('settings.bangBash.name'))
+      .setDesc(t('settings.bangBash.desc'))
+      .addToggle((toggle) => {
+        toggle
+          .setValue(this.host.settings.enableBangBash ?? false)
+          .onChange(async (value) => {
+            await this.host.mutateSettings((settings) => {
+              settings.enableBangBash = value;
+            });
+          });
+      });
+
+    new Setting(container)
       .setName(t('settings.navMappings.name'))
       .setDesc(t('settings.navMappings.desc'))
       .setClass('claudian-settings-textarea')

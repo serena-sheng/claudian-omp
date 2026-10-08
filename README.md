@@ -50,6 +50,10 @@ Required by the Obsidian developer policies, and true as of this fork:
   directory, but the CLIs may read and write outside it (their own config, credentials,
   session stores and caches; OMP uses `~/.omp`, Pi uses `~/.pi`, DeepSeek Harness uses
   `~/.dsh`). Session metadata is kept inside the vault under the plugin's own folder.
+- **Running commands.** The optional composer bash mode runs shell commands you type
+  yourself, in your vault, through your own shell — the same thing you could do in a
+  terminal. It is off by default; output is capped at 1 MiB and commands are killed
+  after 30 seconds. Nothing here is model-driven: it only runs what you type after `!`.
 - **Paid services.** Some providers require a paid subscription or API key. The plugin
   does not sell anything and does not install or update any CLI for you.
 - **Desktop only.** `isDesktopOnly` is true: the plugin spawns subprocesses through Node

@@ -109,6 +109,13 @@
         "preview": "Preview"
       }
     },
+    "bangBash": {
+      "placeholder": "! Führt einen Befehl in der eigenen Shell aus; die Ausgabe wird dieser Unterhaltung hinzugefügt",
+      "running": "Wird ausgeführt…",
+      "timeout": "Befehl nach 30 s abgebrochen",
+      "outputLimit": "Ausgabe bei 1 MB abgeschnitten",
+      "exitCode": "Exit-Code {code}"
+    },
     "planApproval": {
       "header": "Plan ready for approval",
       "prompt": "Approve this plan to start implementing it, or reject to ask for changes.",
@@ -223,6 +230,10 @@
     "instructionMode": {
       "name": "Instruction mode",
       "desc": "Type # in an empty composer to refine a rough instruction into a polished prompt before sending."
+    },
+    "bangBash": {
+      "name": "Bash-Modus",
+      "desc": "Mit ! im leeren Eingabefeld einen Shell-Befehl im Vault in der eigenen Shell ausführen. Die Ausgabe des Befehls wird der Unterhaltung hinzugefügt."
     },
     "navMappings": {
       "name": "Vim-Style Navigationszuordnungen",

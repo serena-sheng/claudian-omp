@@ -47,6 +47,12 @@
   --claudian-input-wrapper-box-shadow: 0 0 0 1px var(--color-blue, var(--interactive-accent));
 }
 
+/* Amber border while composer bash mode is armed: the next Enter runs a local shell command. */
+.claudian-input-wrapper.claudian-input-bang-bash-mode {
+  --claudian-input-wrapper-border-color: var(--color-orange, var(--interactive-accent));
+  --claudian-input-wrapper-box-shadow: 0 0 0 1px var(--color-orange, var(--interactive-accent));
+}
+
 /* Nav row (tab badges start, action icons end) - above input wrapper */
 .claudian-input-nav-row {
   display: flex;

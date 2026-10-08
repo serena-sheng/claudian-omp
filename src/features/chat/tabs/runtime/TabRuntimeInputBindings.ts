@@ -26,9 +26,16 @@ export function buildTabRuntimeInputBindings(
     if ((event.target as HTMLElement | null)?.closest?.('button, a')) return;
     const tab = runtimeRef.requirePublished();
 
+    // Bash mode owns its keys first: an armed command must never reach the
+    // composer's send, dropdown or suggestion handlers.
+    if (ui.bangBashModeManager.handleKeydown(event)) {
+      return;
+    }
+
     const instructionMode = ui.instructionModeManager;
     if (
       !instructionMode.isActive()
+      && !ui.bangBashModeManager.isActive()
       && plugin.settings.enableInstructionMode === true
       && getTabCapabilities(tab, plugin).supportsInstructionMode
       && instructionMode.handleTriggerKey(event)
@@ -36,6 +43,10 @@ export function buildTabRuntimeInputBindings(
       return;
     }
     if (instructionMode.handleKeydown(event)) {
+      return;
+    }
+
+    if (ui.bangBashModeManager.handleTriggerKey(event)) {
       return;
     }
 
@@ -74,8 +85,12 @@ export function buildTabRuntimeInputBindings(
     const tab = runtimeRef.requirePublished();
     commitProvisionalTab(tab);
     controllers.sideChatController.handleComposerInput();
-    ui.composerDropdown.handleInputChange();
+    // A shell command is not a completion query: `/usr/bin/env` must not open menus.
+    if (!ui.bangBashModeManager.isActive()) {
+      ui.composerDropdown.handleInputChange();
+    }
     ui.instructionModeManager.handleInputChange();
+    ui.bangBashModeManager.handleInputChange();
   };
   dom.inputEl.addEventListener('input', inputHandler);
   options.registerCleanup(

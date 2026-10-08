@@ -109,6 +109,13 @@
         "preview": "预览"
       }
     },
+    "bangBash": {
+      "placeholder": "! 用你自己的 shell 执行命令，输出会加入当前对话",
+      "running": "执行中…",
+      "timeout": "命令超过 30 秒未结束，已终止",
+      "outputLimit": "输出超过 1 MB，已截断",
+      "exitCode": "退出码 {code}"
+    },
     "planApproval": {
       "header": "计划已就绪，等待批准",
       "prompt": "批准后 agent 将开始实施该计划；拒绝则请它先修改计划。",
@@ -223,6 +230,10 @@
     "instructionMode": {
       "name": "指令模式",
       "desc": "在空输入框中输入 # 进入指令模式，将口语化的指令改写为规范的 prompt 后再发送。"
+    },
+    "bangBash": {
+      "name": "Bash 模式",
+      "desc": "在空输入框中输入 ! 进入 Bash 模式，用你自己的 shell 在 vault 目录执行一条命令，命令输出会加入当前对话。"
     },
     "navMappings": {
       "name": "Vim 风格导航映射",
