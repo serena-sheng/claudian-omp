@@ -23,6 +23,8 @@ import {
   renderProviderModelEnablementWarning,
 } from '../../../shared/settings/ProviderModelEnablementWarning';
 import { renderProviderModelsSection } from '../../../shared/settings/ProviderModelsSection';
+import { renderProviderReadinessPanel } from '../../../shared/settings/ProviderReadinessPanel';
+import { CLI_PROVIDER_METADATA } from '../../cli/CLIProviderMetadataTable';
 import type { GrokWorkspaceServices } from '../app/GrokWorkspaceServices';
 import {
   getGrokProviderSettings,
@@ -70,6 +72,7 @@ export const grokSettingsTabRenderer: ProviderSettingsTabRenderer = {
       },
     };
 
+    const readinessContainer = container.createDiv();
     const installationContainer = container.createDiv();
     const lastProviderWarning = renderLastEnabledProviderWarning(container);
 
@@ -83,19 +86,31 @@ export const grokSettingsTabRenderer: ProviderSettingsTabRenderer = {
       providerName: 'Grok Build',
     });
 
+    const inspectInstallation = async () => {
+      const settings = context.plugin.settings as unknown as Record<string, unknown>;
+      const config = getGrokProviderSettings(settings);
+      return probeCLIInstallation({
+        path: await context.plugin.getResolvedProviderCliPath('grok'),
+        configuredPath: config.cliPathsByHost[hostnameKey] || config.cliPath,
+        args: ['--version'],
+        env: { ...process.env, ...getRuntimeEnvironmentVariables(settings, 'grok') },
+      });
+    };
+
+    const readiness = renderProviderReadinessPanel({
+      container: readinessContainer,
+      metadata: CLI_PROVIDER_METADATA.grok,
+      providerName: 'Grok Build',
+      enabled: () => getGrokProviderSettings(settingsBag).enabled,
+      inspectCLI: inspectInstallation,
+      modelCatalog: workspace.modelCatalog,
+      checkForUpdates: () => settingsBag.checkCliUpdates === true,
+    });
+
     renderCLIInstallationSetting({
       cliName: 'Grok Build',
       icon: GROK_PROVIDER_ICON,
-      inspect: async () => {
-        const settings = context.plugin.settings as unknown as Record<string, unknown>;
-        const config = getGrokProviderSettings(settings);
-        return probeCLIInstallation({
-          path: await context.plugin.getResolvedProviderCliPath('grok'),
-          configuredPath: config.cliPathsByHost[hostnameKey] || config.cliPath,
-          args: ['--version'],
-          env: { ...process.env, ...getRuntimeEnvironmentVariables(settings, 'grok') },
-        });
-      },
+      inspect: inspectInstallation,
       container: installationContainer,
       enablement,
       getValue: () => {
@@ -144,7 +159,16 @@ export const grokSettingsTabRenderer: ProviderSettingsTabRenderer = {
       renderCustomContextLimits: target => context.renderCustomContextLimits(target, GROK_PROVIDER_ID),
       scope: 'provider:grok',
     });
-    return modelPicker;
+    return {
+      refresh: () => {
+        modelPicker.refresh();
+        void readiness.refresh();
+      },
+      dispose: () => {
+        modelPicker.dispose();
+        readiness.dispose();
+      },
+    };
   },
 };
 

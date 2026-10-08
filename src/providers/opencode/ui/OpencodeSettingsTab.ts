@@ -21,6 +21,8 @@ import {
   renderProviderModelEnablementWarning,
 } from '../../../shared/settings/ProviderModelEnablementWarning';
 import { renderProviderModelsSection } from '../../../shared/settings/ProviderModelsSection';
+import { renderProviderReadinessPanel } from '../../../shared/settings/ProviderReadinessPanel';
+import { CLI_PROVIDER_METADATA } from '../../cli/CLIProviderMetadataTable';
 import type { OpencodeMetadataService } from '../metadata/OpencodeMetadataService';
 import {
   getOpencodeProviderSettings,
@@ -68,6 +70,7 @@ export function createOpencodeSettingsTabRenderer(
         },
       };
 
+      const readinessContainer = container.createDiv();
       const installationContainer = container.createDiv();
       const updateMigrationNotice = renderOpencodeMigrationNotice(container);
       const lastProviderWarning = renderLastEnabledProviderWarning(container);
@@ -79,21 +82,33 @@ export function createOpencodeSettingsTabRenderer(
         providerName: 'OpenCode',
       });
 
+      const inspectInstallation = async () => {
+        const settings = context.plugin.settings as unknown as Record<string, unknown>;
+        const config = getOpencodeProviderSettings(settings);
+        const installation = await probeCLIInstallation({
+          path: await context.plugin.getResolvedProviderCliPath('opencode'),
+          configuredPath: config.cliPathsByHost[hostnameKey] || config.cliPath,
+          args: ['--version'],
+          env: { ...process.env, ...getRuntimeEnvironmentVariables(settings, 'opencode') },
+        });
+        updateMigrationNotice(installation.version);
+        return installation;
+      };
+
+      const readiness = renderProviderReadinessPanel({
+        container: readinessContainer,
+        metadata: CLI_PROVIDER_METADATA.opencode,
+        providerName: 'OpenCode',
+        enabled: () => getOpencodeProviderSettings(settingsBag).enabled,
+        inspectCLI: inspectInstallation,
+        modelCatalog: opencodeWorkspace.modelCatalog,
+        checkForUpdates: () => settingsBag.checkCliUpdates === true,
+      });
+
       renderCLIInstallationSetting({
         cliName: 'OpenCode',
         icon: OPENCODE_PROVIDER_ICON,
-        inspect: async () => {
-          const settings = context.plugin.settings as unknown as Record<string, unknown>;
-          const config = getOpencodeProviderSettings(settings);
-          const installation = await probeCLIInstallation({
-            path: await context.plugin.getResolvedProviderCliPath('opencode'),
-            configuredPath: config.cliPathsByHost[hostnameKey] || config.cliPath,
-            args: ['--version'],
-            env: { ...process.env, ...getRuntimeEnvironmentVariables(settings, 'opencode') },
-          });
-          updateMigrationNotice(installation.version);
-          return installation;
-        },
+        inspect: inspectInstallation,
         container: installationContainer,
         enablement,
         getValue: () => {
@@ -138,7 +153,16 @@ export function createOpencodeSettingsTabRenderer(
         placeholder: 'OPENCODE_DB=/path/to/opencode.db',
         renderCustomContextLimits: (target) => context.renderCustomContextLimits(target, 'opencode'),
       });
-      return modelPicker;
+      return {
+        refresh: () => {
+          modelPicker.refresh();
+          void readiness.refresh();
+        },
+        dispose: () => {
+          modelPicker.dispose();
+          readiness.dispose();
+        },
+      };
     },
   };
 }

@@ -122,6 +122,57 @@
     }
   },
   "settings": {
+    "readiness": {
+      "heading": "Prontidão",
+      "refresh": "Verificar de novo",
+      "checking": "Verificando…",
+      "checkFailed": "Não foi possível verificar a prontidão",
+      "status": {
+        "ready": "Pronto",
+        "attention": "Requer atenção",
+        "blocked": "Bloqueado",
+        "disabled": "Desativado"
+      },
+      "check": {
+        "enabled": "Provedor ativado",
+        "cli": "CLI disponível",
+        "models": "Catálogo de modelos",
+        "selection": "Modelo selecionado"
+      },
+      "detail": {
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "cliFound": "v{version} · {path}",
+        "cliNoVersion": "{path} · versão ilegível",
+        "cliMissing": "Não encontrado no PATH",
+        "models": "{count} modelos encontrados",
+        "modelsNone": "Nenhum modelo encontrado ainda",
+        "selection": "{count} modelos ativados",
+        "selectionNone": "Nenhum modelo ativado"
+      },
+      "remedy": {
+        "enable": "Ative {provider} para usá-lo.",
+        "cliMissing": "{name} não foi encontrado. Instale-o e verifique de novo — o Claudian não executa instalações por você:",
+        "cliUnreadable": "A CLI foi encontrada, mas não informou uma versão. Verifique o caminho abaixo.",
+        "refreshModels": "Abra «Modelos» abaixo e atualize o catálogo.",
+        "selectModel": "Ative pelo menos um modelo em «Modelos» abaixo."
+      },
+      "action": {
+        "copy": "Copiar",
+        "copied": "Copiado",
+        "checkUpdate": "Verificar atualização"
+      },
+      "update": {
+        "checking": "Consultando o npm…",
+        "available": "Nova versão {version} disponível. Atualize com:",
+        "latest": "Atualizado ({version} é a mais recente).",
+        "unavailable": "Não foi possível acessar o registro npm."
+      }
+    },
+    "cliUpdates": {
+      "name": "Check CLI updates",
+      "desc": "Show a \"Check for update\" button in each provider's readiness panel. Pressing it queries registry.npmjs.org for the latest published version of that provider's CLI package. Off by default: Claudian makes no registry request unless you enable this."
+    },
     "tabs": {
       "general": "Geral",
       "providers": "Provedores",

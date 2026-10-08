@@ -122,6 +122,57 @@
     }
   },
   "settings": {
+    "readiness": {
+      "heading": "執行狀態",
+      "refresh": "重新檢查",
+      "checking": "正在檢查…",
+      "checkFailed": "無法檢查執行狀態",
+      "status": {
+        "ready": "就緒",
+        "attention": "需要留意",
+        "blocked": "無法使用",
+        "disabled": "已停用"
+      },
+      "check": {
+        "enabled": "已啟用",
+        "cli": "CLI 可用",
+        "models": "模型目錄",
+        "selection": "已選模型"
+      },
+      "detail": {
+        "enabled": "已啟用",
+        "disabled": "已停用",
+        "cliFound": "v{version} · {path}",
+        "cliNoVersion": "{path} · 無法讀取版本",
+        "cliMissing": "在 PATH 中找不到",
+        "models": "已發現 {count} 個模型",
+        "modelsNone": "尚未發現任何模型",
+        "selection": "已啟用 {count} 個模型",
+        "selectionNone": "尚未啟用任何模型"
+      },
+      "remedy": {
+        "enable": "開啟 {provider} 即可使用。",
+        "cliMissing": "找不到 {name}。請先安裝再重新檢查——Claudian 不會代為安裝：",
+        "cliUnreadable": "已找到 CLI，但無法讀取版本。請檢查下方的路徑。",
+        "refreshModels": "展開下方「模型」並重新整理模型目錄。",
+        "selectModel": "請在下方「模型」中至少啟用一個模型。"
+      },
+      "action": {
+        "copy": "複製",
+        "copied": "已複製",
+        "checkUpdate": "檢查更新"
+      },
+      "update": {
+        "checking": "正在查詢 npm…",
+        "available": "有新版本 {version}，可用以下指令更新：",
+        "latest": "已是最新（最新版本 {version}）。",
+        "unavailable": "無法連線 npm registry。"
+      }
+    },
+    "cliUpdates": {
+      "name": "Check CLI updates",
+      "desc": "Show a \"Check for update\" button in each provider's readiness panel. Pressing it queries registry.npmjs.org for the latest published version of that provider's CLI package. Off by default: Claudian makes no registry request unless you enable this."
+    },
     "tabs": {
       "general": "一般",
       "providers": "提供者",

@@ -122,6 +122,57 @@
     }
   },
   "settings": {
+    "readiness": {
+      "heading": "Readiness",
+      "refresh": "Re-check",
+      "checking": "Checking…",
+      "checkFailed": "Could not check readiness",
+      "status": {
+        "ready": "Ready",
+        "attention": "Needs attention",
+        "blocked": "Blocked",
+        "disabled": "Disabled"
+      },
+      "check": {
+        "enabled": "Provider enabled",
+        "cli": "CLI available",
+        "models": "Model catalog",
+        "selection": "Model selected"
+      },
+      "detail": {
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "cliFound": "v{version} · {path}",
+        "cliNoVersion": "{path} · version unreadable",
+        "cliMissing": "Not found on PATH",
+        "models": "{count} models discovered",
+        "modelsNone": "No models discovered",
+        "selection": "{count} models enabled",
+        "selectionNone": "No model enabled"
+      },
+      "remedy": {
+        "enable": "Turn on {provider} to use it.",
+        "cliMissing": "{name} was not found. Install it, then re-check — Claudian does not run installs for you:",
+        "cliUnreadable": "The CLI was found but did not report a version. Check the path below.",
+        "refreshModels": "Open Models below and refresh the model catalog.",
+        "selectModel": "Enable at least one model under Models below."
+      },
+      "action": {
+        "copy": "Copy",
+        "copied": "Copied",
+        "checkUpdate": "Check for update"
+      },
+      "update": {
+        "checking": "Checking npm…",
+        "available": "New version {version} is available. Update with:",
+        "latest": "Up to date ({version} is the latest).",
+        "unavailable": "Could not reach the npm registry."
+      }
+    },
+    "cliUpdates": {
+      "name": "Check CLI updates",
+      "desc": "Show a \"Check for update\" button in each provider's readiness panel. Pressing it queries registry.npmjs.org for the latest published version of that provider's CLI package. Off by default: Claudian makes no registry request unless you enable this."
+    },
     "tabs": {
       "general": "General",
       "providers": "Providers",

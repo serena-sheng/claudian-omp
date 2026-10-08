@@ -122,6 +122,57 @@
     }
   },
   "settings": {
+    "readiness": {
+      "heading": "準備状況",
+      "refresh": "再確認",
+      "checking": "確認中…",
+      "checkFailed": "準備状況を確認できませんでした",
+      "status": {
+        "ready": "準備完了",
+        "attention": "要確認",
+        "blocked": "利用不可",
+        "disabled": "無効"
+      },
+      "check": {
+        "enabled": "プロバイダー有効",
+        "cli": "CLI 利用可能",
+        "models": "モデルカタログ",
+        "selection": "モデル選択済み"
+      },
+      "detail": {
+        "enabled": "有効",
+        "disabled": "無効",
+        "cliFound": "v{version} · {path}",
+        "cliNoVersion": "{path} · バージョンを取得できません",
+        "cliMissing": "PATH 上に見つかりません",
+        "models": "{count} 個のモデルを検出",
+        "modelsNone": "モデルがまだ見つかっていません",
+        "selection": "{count} 個のモデルを有効化",
+        "selectionNone": "有効なモデルがありません"
+      },
+      "remedy": {
+        "enable": "{provider} を有効にすると使用できます。",
+        "cliMissing": "{name} が見つかりません。インストールしてから再確認してください（Claudian はインストールを実行しません）：",
+        "cliUnreadable": "CLI は見つかりましたが、バージョンを取得できませんでした。下のパスを確認してください。",
+        "refreshModels": "下の「モデル」を開いてモデルカタログを更新してください。",
+        "selectModel": "下の「モデル」で少なくとも 1 つのモデルを有効にしてください。"
+      },
+      "action": {
+        "copy": "コピー",
+        "copied": "コピーしました",
+        "checkUpdate": "更新を確認"
+      },
+      "update": {
+        "checking": "npm を確認中…",
+        "available": "新しいバージョン {version} があります。次のコマンドで更新できます：",
+        "latest": "最新です（最新バージョン {version}）。",
+        "unavailable": "npm レジストリに接続できませんでした。"
+      }
+    },
+    "cliUpdates": {
+      "name": "Check CLI updates",
+      "desc": "Show a \"Check for update\" button in each provider's readiness panel. Pressing it queries registry.npmjs.org for the latest published version of that provider's CLI package. Off by default: Claudian makes no registry request unless you enable this."
+    },
     "tabs": {
       "general": "一般",
       "providers": "プロバイダー",
