@@ -428,13 +428,13 @@ describe('VaultFileAdapter', () => {
       });
 
       await expect(Promise.all([
-        vaultAdapter.ensureFolder('.claudian-fusion/sessions'),
-        vaultAdapter.ensureFolder('.claudian-fusion/sessions'),
+        vaultAdapter.ensureFolder('.super-useful-claudian/sessions'),
+        vaultAdapter.ensureFolder('.super-useful-claudian/sessions'),
       ])).resolves.toEqual([undefined, undefined]);
 
       expect(mockAdapter.mkdir).toHaveBeenCalledTimes(2);
-      expect(mockAdapter.mkdir).toHaveBeenNthCalledWith(1, '.claudian-fusion');
-      expect(mockAdapter.mkdir).toHaveBeenNthCalledWith(2, '.claudian-fusion/sessions');
+      expect(mockAdapter.mkdir).toHaveBeenNthCalledWith(1, '.super-useful-claudian');
+      expect(mockAdapter.mkdir).toHaveBeenNthCalledWith(2, '.super-useful-claudian/sessions');
     });
   });
 

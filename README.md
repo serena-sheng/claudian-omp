@@ -1,4 +1,7 @@
-# Claudian Fusion
+# Super Useful Claudian
+
+Run Oh My Pi, DeepSeek Harness, Claude Code, Codex, Grok, OpenCode and Pi inside your vault as
+chat collaborators, with provider readiness checks, a capability matrix and a token usage meter.
 
 An independent fork of [Claudian](https://github.com/YishenTu/claudian) by Yishen Tu.
 It keeps everything Claudian already does — chat tabs, inline editing, session manager,
@@ -7,6 +10,10 @@ extra agent harnesses plus a few enhancements borrowed from
 [oh-my-claudian](https://github.com/lee259/oh-my-claudian) by Lee.
 
 Both upstream projects are MIT licensed; see NOTICE.md and LICENSE.
+
+![The chat sidebar with a coding agent running inside the vault](assets/main-chat-single-pane.png)
+
+![Zen mode with an expanded chat](assets/zen-mode-expanded.png)
 
 ## Requirements
 
@@ -74,7 +81,7 @@ Required by the Obsidian developer policies, and true as of this fork:
   terminal. It is off by default; output is capped at 1 MiB and commands are killed
   after 30 seconds. Nothing here is model-driven: it only runs what you type after `!`.
 - **What is stored locally.** The plugin keeps its settings, session metadata and token
-  usage log inside your vault, under `.claudian-fusion/`. The usage log records, per turn, the
+  usage log inside your vault, under `.super-useful-claudian/`. The usage log records, per turn, the
   conversation id, provider, model and token counts — never message content — and is
   trimmed to 90 days. Nothing is uploaded anywhere by the plugin itself.
 - **Paid services.** Some providers require a paid subscription or API key. The plugin
@@ -90,10 +97,10 @@ explicit permission from the original author before a fork may be listed there
 out, install it manually or via BRAT:
 
 1. Download `main.js`, `manifest.json` and `styles.css` from the latest release.
-2. Put them in `YOUR_VAULT/.obsidian/plugins/claudian-fusion/`.
-3. Enable **Claudian Fusion** in Settings, Community plugins.
+2. Put them in `YOUR_VAULT/.obsidian/plugins/super-useful-claudian/`.
+3. Enable **Super Useful Claudian** in Settings, Community plugins.
 
-This fork registers its own view type and keeps its own `.claudian-fusion/` storage, so it can
+This fork registers its own view type and keeps its own `.super-useful-claudian/` storage, so it can
 sit next to upstream **Claudian** without either one registering the same view or
 overwriting the other's settings. Install whichever you want to use.
 
@@ -109,7 +116,7 @@ Requires Node.js 24.x. `npm run test:unit` runs the unit suite; `npm run typeche
 
 ## Configuration
 
-Settings live in `.claudian-fusion/` inside your vault. The plugin stores its settings file,
+Settings live in `.super-useful-claudian/` inside your vault. The plugin stores its settings file,
 session metadata and cached catalogs there — separate from upstream Claudian, which uses
 `.claudian/`, so the two can coexist on disk without corrupting each other.
 

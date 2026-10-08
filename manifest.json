@@ -1,9 +1,9 @@
 {
-  "id": "claudian-fusion",
-  "name": "Claudian Fusion",
-  "version": "1.3.0",
+  "id": "super-useful-claudian",
+  "name": "Super Useful Claudian",
+  "version": "1.4.0",
   "minAppVersion": "1.13.0",
-  "description": "Claudian fork that adds the Oh My Pi OMP harness and DeepSeek Harness alongside Claude Code, Codex, Grok, OpenCode and Pi. Your vault becomes their working directory for file reads, writes, search, bash commands and multi-step workflows.",
+  "description": "Run Oh My Pi, DeepSeek Harness, Claude Code, Codex, Grok, OpenCode and Pi inside your vault as chat collaborators. A fork of Claudian with provider readiness checks, a capability matrix and a token usage meter.",
   "author": "Serena Sheng",
   "authorUrl": "https://github.com/serena-sheng",
   "isDesktopOnly": true

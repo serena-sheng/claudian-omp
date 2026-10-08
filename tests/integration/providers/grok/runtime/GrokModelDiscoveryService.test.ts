@@ -113,9 +113,16 @@ it.each(['hang-initialize', 'hang-list'])(
   },
 );
 
+// The budget has to survive a real Node process spawn, twice, on a loaded CI box: the
+// hanging probe burns one window and the legacy fallback command needs its own. At 200ms
+// the fallback lost that race under parallel load and returned no models, which read as a
+// fallback bug rather than a tight budget. Still far below the 20s production default, so
+// a hanging child must go through the timeout path here.
+const HANG_TIMEOUT_MS = 2_000;
+
 it.each(['hang-initialize', 'hang-list'])(
   'times out %s, closes the process, and uses the legacy catalog', async scenario => {
-    expect(await makeService(scenario, 200).discoverCatalog()).toMatchObject({
+    expect(await makeService(scenario, HANG_TIMEOUT_MS).discoverCatalog()).toMatchObject({
       kind: 'completed', models: [{ rawId: 'legacy-model' }],
     });
     expectProcessesClosed();

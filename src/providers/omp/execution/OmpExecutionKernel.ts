@@ -55,7 +55,7 @@ export class OmpRPCSessionKernel implements OmpExecutionKernel {
   ) {
     let processSpec = launchSpec;
     if (launchSpec.enableTreeBridge) {
-      const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'claudian-fusion-tree-'));
+      const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'super-useful-claudian-tree-'));
       try {
         const extension = path.join(directory, 'extension.ts');
         fs.writeFileSync(extension, OMP_TREE_EXTENSION_SOURCE, 'utf8');

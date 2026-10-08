@@ -113,7 +113,7 @@ export interface StoredChatModelSelection {
 }
 
 /**
- * Application settings stored in .claudian-fusion/claudian-settings.json.
+ * Application settings stored in .super-useful-claudian/claudian-settings.json.
  *
  * Provider-specific fields (model, effortLevel, serviceTier, etc.) use
  * `string` here.  The active provider casts internally when it needs

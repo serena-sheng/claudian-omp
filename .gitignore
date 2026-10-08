@@ -23,7 +23,7 @@ node_modules/
 *.obsidian
 
 # Plugin state written next to a vault when developing against this repo
-.claudian-fusion/
+.super-useful-claudian/
 .claudian/
 usage.jsonl
 
