@@ -96,7 +96,7 @@ describe('getInstallationKey', () => {
       const durableKey = isolatedIdentity.getInstallationKey();
 
       expect(durableKey).toMatch(/^device-[a-f0-9]{64}$/);
-      expect(values.get('claudian.deviceSettingsKey')).toBeTruthy();
+      expect(values.get('claudian-omp.deviceSettingsKey')).toBeTruthy();
     } finally {
       if (originalStorage) {
         Object.defineProperty(globalThis.window, 'localStorage', originalStorage);

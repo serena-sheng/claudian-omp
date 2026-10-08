@@ -19,7 +19,7 @@ export function parseInstallationKey(value: unknown): InstallationKey {
   return value;
 }
 
-const DEVICE_SETTINGS_STORAGE_KEY = 'claudian.deviceSettingsKey';
+const DEVICE_SETTINGS_STORAGE_KEY = 'claudian-omp.deviceSettingsKey';
 let cachedDeviceSettingsSeed: string | null = null;
 let cachedDeviceSettingsKey: string | null = null;
 

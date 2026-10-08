@@ -428,13 +428,13 @@ describe('VaultFileAdapter', () => {
       });
 
       await expect(Promise.all([
-        vaultAdapter.ensureFolder('.claudian/sessions'),
-        vaultAdapter.ensureFolder('.claudian/sessions'),
+        vaultAdapter.ensureFolder('.claudian-omp/sessions'),
+        vaultAdapter.ensureFolder('.claudian-omp/sessions'),
       ])).resolves.toEqual([undefined, undefined]);
 
       expect(mockAdapter.mkdir).toHaveBeenCalledTimes(2);
-      expect(mockAdapter.mkdir).toHaveBeenNthCalledWith(1, '.claudian');
-      expect(mockAdapter.mkdir).toHaveBeenNthCalledWith(2, '.claudian/sessions');
+      expect(mockAdapter.mkdir).toHaveBeenNthCalledWith(1, '.claudian-omp');
+      expect(mockAdapter.mkdir).toHaveBeenNthCalledWith(2, '.claudian-omp/sessions');
     });
   });
 

@@ -91,10 +91,10 @@ describe('startApplication', () => {
     it('should merge saved data with defaults', async () => {
       // Mock claudian-settings.json exists with custom values (Claudian-specific settings)
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => {
-        return path === '.claudian/claudian-settings.json';
+        return path === '.claudian-omp/claudian-settings.json';
       });
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.claudian-omp/claudian-settings.json') {
           return JSON.stringify({
             userName: 'TestUser',
           });
@@ -133,10 +133,10 @@ describe('startApplication', () => {
     it('preserves the saved model while applying environment configuration', async () => {
       // Mock claudian-settings.json with environment variables
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => {
-        return path === '.claudian/claudian-settings.json';
+        return path === '.claudian-omp/claudian-settings.json';
       });
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.claudian-omp/claudian-settings.json') {
           return JSON.stringify({
             providerConfigs: { claude: { environmentVariables: 'ANTHROPIC_MODEL=custom-model' } },
             lastEnvHash: '',
@@ -156,7 +156,7 @@ describe('startApplication', () => {
   describe('session metadata', () => {
     it('migrates a legacy Codex fingerprint before reconciling persisted sessions', async () => {
       const timestamp = Date.now();
-      const metadataPath = '.claudian/sessions/conv-codex-legacy.meta.json';
+      const metadataPath = '.claudian-omp/sessions/conv-codex-legacy.meta.json';
       const sessionMetadata = {
         id: 'conv-codex-legacy',
         providerId: 'codex',
@@ -172,17 +172,17 @@ describe('startApplication', () => {
       };
 
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => (
-        path === '.claudian/claudian-settings.json'
-        || path === '.claudian/sessions'
+        path === '.claudian-omp/claudian-settings.json'
+        || path === '.claudian-omp/sessions'
         || path === metadataPath
       ));
       mockApp.vault.adapter.list.mockImplementation(async (path: string) => (
-        path === '.claudian/sessions'
+        path === '.claudian-omp/sessions'
           ? { files: [metadataPath], folders: [] }
           : { files: [], folders: [] }
       ));
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.claudian-omp/claudian-settings.json') {
           return JSON.stringify({
             providerConfigs: {
               codex: {
@@ -227,21 +227,21 @@ describe('startApplication', () => {
       });
 
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => {
-        return path === '.claudian/claudian-settings.json'
-          || path === '.claudian/sessions'
-          || path === '.claudian/sessions/conv-stale-1.meta.json';
+        return path === '.claudian-omp/claudian-settings.json'
+          || path === '.claudian-omp/sessions'
+          || path === '.claudian-omp/sessions/conv-stale-1.meta.json';
       });
       mockApp.vault.adapter.list.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions') {
-          return { files: ['.claudian/sessions/conv-stale-1.meta.json'], folders: [] };
+        if (path === '.claudian-omp/sessions') {
+          return { files: ['.claudian-omp/sessions/conv-stale-1.meta.json'], folders: [] };
         }
         return { files: [], folders: [] };
       });
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions/conv-stale-1.meta.json') {
+        if (path === '.claudian-omp/sessions/conv-stale-1.meta.json') {
           return sessionMeta;
         }
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.claudian-omp/claudian-settings.json') {
           return JSON.stringify({});
         }
         return '';
@@ -251,7 +251,7 @@ describe('startApplication', () => {
 
       expect(domains.conversations.getConversationList()).toHaveLength(1);
       expect(mockApp.vault.adapter.remove).not.toHaveBeenCalledWith(
-        '.claudian/sessions/conv-stale-1.meta.json',
+        '.claudian-omp/sessions/conv-stale-1.meta.json',
       );
     });
 
@@ -268,26 +268,26 @@ describe('startApplication', () => {
       // Mock files exist
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => {
         // Session files
-        if (path === '.claudian/sessions' || path === '.claudian/sessions/conv-saved-1.meta.json') {
+        if (path === '.claudian-omp/sessions' || path === '.claudian-omp/sessions/conv-saved-1.meta.json') {
           return true;
         }
         // claudian-settings.json exists
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.claudian-omp/claudian-settings.json') {
           return true;
         }
         return false;
       });
       mockApp.vault.adapter.list.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions') {
-          return { files: ['.claudian/sessions/conv-saved-1.meta.json'], folders: [] };
+        if (path === '.claudian-omp/sessions') {
+          return { files: ['.claudian-omp/sessions/conv-saved-1.meta.json'], folders: [] };
         }
         return { files: [], folders: [] };
       });
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions/conv-saved-1.meta.json') {
+        if (path === '.claudian-omp/sessions/conv-saved-1.meta.json') {
           return sessionMeta;
         }
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.claudian-omp/claudian-settings.json') {
           return JSON.stringify({});
         }
         return '';
@@ -314,24 +314,24 @@ describe('startApplication', () => {
       });
 
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => {
-        return path === '.claudian/claudian-settings.json' ||
-          path === '.claudian/sessions' ||
-          path === '.claudian/sessions/conv-saved-1.meta.json';
+        return path === '.claudian-omp/claudian-settings.json' ||
+          path === '.claudian-omp/sessions' ||
+          path === '.claudian-omp/sessions/conv-saved-1.meta.json';
       });
       mockApp.vault.adapter.list.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions') {
-          return { files: ['.claudian/sessions/conv-saved-1.meta.json'], folders: [] };
+        if (path === '.claudian-omp/sessions') {
+          return { files: ['.claudian-omp/sessions/conv-saved-1.meta.json'], folders: [] };
         }
         return { files: [], folders: [] };
       });
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.claudian-omp/claudian-settings.json') {
           // All these fields are now in claudian-settings.json
           return JSON.stringify({
             providerConfigs: { claude: { environmentHash: 'old-hash', environmentVariables: 'ANTHROPIC_BASE_URL=https://api.example.com' } },
           });
         }
-        if (path === '.claudian/sessions/conv-saved-1.meta.json') {
+        if (path === '.claudian-omp/sessions/conv-saved-1.meta.json') {
           return sessionMeta;
         }
         return '';
@@ -346,7 +346,7 @@ describe('startApplication', () => {
       expect(loaded?.sessionId).toBeNull();
 
       const sessionWrite = (mockApp.vault.adapter.write as jest.Mock).mock.calls.find(
-        ([path]) => path === '.claudian/sessions/conv-saved-1.meta.json'
+        ([path]) => path === '.claudian-omp/sessions/conv-saved-1.meta.json'
       );
       expect(sessionWrite).toBeDefined();
       const meta = JSON.parse(sessionWrite?.[1] as string);
@@ -385,21 +385,21 @@ describe('startApplication', () => {
       });
 
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => {
-        return path === '.claudian/claudian-settings.json' ||
-          path === '.claudian/sessions' ||
-          path === '.claudian/sessions/conv-multi-session.meta.json';
+        return path === '.claudian-omp/claudian-settings.json' ||
+          path === '.claudian-omp/sessions' ||
+          path === '.claudian-omp/sessions/conv-multi-session.meta.json';
       });
       mockApp.vault.adapter.list.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions') {
-          return { files: ['.claudian/sessions/conv-multi-session.meta.json'], folders: [] };
+        if (path === '.claudian-omp/sessions') {
+          return { files: ['.claudian-omp/sessions/conv-multi-session.meta.json'], folders: [] };
         }
         return { files: [], folders: [] };
       });
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions/conv-multi-session.meta.json') {
+        if (path === '.claudian-omp/sessions/conv-multi-session.meta.json') {
           return sessionMeta;
         }
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.claudian-omp/claudian-settings.json') {
           return JSON.stringify({});
         }
         return '';

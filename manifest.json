@@ -1,10 +1,10 @@
 {
-  "id": "realclaudian",
-  "name": "Claudian",
+  "id": "claudian-omp",
+  "name": "Claudian OMP",
   "version": "2.3.16",
   "minAppVersion": "1.13.0",
-  "description": "Embeds Claude Code, Codex, and other coding agents as AI collaborators in your vault. Your vault becomes their working directory, giving them capabilities for file reads and writes, search, bash commands, and multi-step workflows.",
-  "author": "Yishen Tu",
-  "authorUrl": "https://github.com/YishenTu",
+  "description": "Claudian fork with extra agent harnesses: Oh My Pi (OMP) and DeepSeek Harness, alongside Claude Code, Codex, Grok, OpenCode and Pi. Your vault becomes their working directory for file reads and writes, search, bash commands, and multi-step workflows.",
+  "author": "Serena Sheng",
+  "authorUrl": "https://github.com/serena-sheng",
   "isDesktopOnly": true
 }

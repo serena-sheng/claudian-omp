@@ -150,7 +150,7 @@ describe('ClaudianPlugin', () => {
 
   function installVaultFiles(initialFiles: Record<string, string>): Map<string, string> {
     const files = new Map(Object.entries(initialFiles));
-    const folders = new Set<string>(['.claudian']);
+    const folders = new Set<string>(['.claudian-omp']);
     mockApp.vault.adapter.exists.mockImplementation(async (path: string) => (
       files.has(path) || folders.has(path)
     ));
@@ -346,9 +346,9 @@ describe('ClaudianPlugin', () => {
     });
 
     it.each(['run', 'before-layout', 'before-timer'])('defers obsolete input cleanup until after layout and respects unload: %s', async mode => {
-      const inputPath = '.claudian/sessions/old.inputs.json';
+      const inputPath = '.claudian-omp/sessions/old.inputs.json';
       const files = installVaultFiles({ [inputPath]: '{}' });
-      await mockApp.vault.adapter.mkdir('.claudian/sessions');
+      await mockApp.vault.adapter.mkdir('.claudian-omp/sessions');
       mockApp.vault.adapter.list.mockResolvedValue({ files: [inputPath], folders: [] });
       await plugin.onload();
       expect(files.has(inputPath)).toBe(true);
@@ -389,9 +389,9 @@ describe('ClaudianPlugin', () => {
     });
 
     it('joins an admitted input deletion on unload and leaves remaining inputs for the next launch', async () => {
-      const inputs = ['.claudian/sessions/first.inputs.json', '.claudian/sessions/second.inputs.json'];
+      const inputs = ['.claudian-omp/sessions/first.inputs.json', '.claudian-omp/sessions/second.inputs.json'];
       const files = installVaultFiles(Object.fromEntries(inputs.map(file => [file, '{}'])));
-      await mockApp.vault.adapter.mkdir('.claudian/sessions');
+      await mockApp.vault.adapter.mkdir('.claudian-omp/sessions');
       mockApp.vault.adapter.list.mockResolvedValue({ files: inputs, folders: [] });
       let entered!: () => void;
       const deleting = new Promise<void>(resolve => { entered = resolve; });
@@ -421,9 +421,9 @@ describe('ClaudianPlugin', () => {
     });
 
     it('retries a failed deferred input cleanup on the next launch', async () => {
-      const inputPath = '.claudian/sessions/old.inputs.json';
+      const inputPath = '.claudian-omp/sessions/old.inputs.json';
       const files = installVaultFiles({ [inputPath]: '{}' });
-      await mockApp.vault.adapter.mkdir('.claudian/sessions');
+      await mockApp.vault.adapter.mkdir('.claudian-omp/sessions');
       mockApp.vault.adapter.list.mockResolvedValue({ files: [inputPath], folders: [] });
       mockApp.vault.adapter.remove.mockRejectedValueOnce(new Error('Storage unavailable'));
       await plugin.onload();
@@ -772,10 +772,10 @@ describe('ClaudianPlugin', () => {
         resumeAtMessageId: 'deferred-message-id',
       };
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => (
-        path === '.claudian/claudian-settings.json'
+        path === '.claudian-omp/claudian-settings.json'
       ));
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.claudian-omp/claudian-settings.json') {
           return JSON.stringify({
             providerConfigs: {
               claude: {
@@ -1056,7 +1056,7 @@ describe('ClaudianPlugin', () => {
     });
 
     it('keeps a pending provider invalidation after an incomplete metadata scan', async () => {
-      const settingsPath = '.claudian/claudian-settings.json';
+      const settingsPath = '.claudian-omp/claudian-settings.json';
       const pendingGeneration = 11;
       const deferredMetadata = {
         id: 'incomplete-scan-session',
@@ -1218,7 +1218,7 @@ describe('ClaudianPlugin', () => {
     });
 
     it('retries a pending provider invalidation after unload and restart', async () => {
-      const settingsPath = '.claudian/claudian-settings.json';
+      const settingsPath = '.claudian-omp/claudian-settings.json';
       const deferredMetadata = {
         id: 'restart-deferred-session',
         providerId: 'claude' as const,
@@ -1293,7 +1293,7 @@ describe('ClaudianPlugin', () => {
     });
 
     it('keeps a pending provider invalidation when a metadata write fails', async () => {
-      const settingsPath = '.claudian/claudian-settings.json';
+      const settingsPath = '.claudian-omp/claudian-settings.json';
       const pendingGeneration = 7;
       const deferredMetadata = {
         id: 'failed-write-session',
@@ -1571,15 +1571,15 @@ describe('ClaudianPlugin', () => {
 
       await chatHostOf(plugin).mutateSettings(() => undefined);
 
-      // Claudian-specific settings should be written to .claudian/claudian-settings.json
+      // Claudian-specific settings should be written to .claudian-omp/claudian-settings.json
       expect(mockApp.vault.adapter.write).toHaveBeenCalledWith(
-        '.claudian/claudian-settings.json',
+        '.claudian-omp/claudian-settings.json',
         expect.any(String)
       );
 
       // The written content should include state fields
       const writeCall = (mockApp.vault.adapter.write as jest.Mock).mock.calls.find(
-        ([path]) => path === '.claudian/claudian-settings.json'
+        ([path]) => path === '.claudian-omp/claudian-settings.json'
       );
       expect(writeCall).toBeDefined();
       const content = JSON.parse(writeCall[1]);
@@ -1882,7 +1882,7 @@ describe('ClaudianPlugin', () => {
         const persistedFailureSettings = JSON.parse(
           [...mockApp.vault.adapter.write.mock.calls]
             .reverse()
-            .find(([path]: [string]) => path === '.claudian/claudian-settings.json')?.[1]
+            .find(([path]: [string]) => path === '.claudian-omp/claudian-settings.json')?.[1]
             ?? '{}',
         );
         expect(persistedFailureSettings.pendingProviderSessionInvalidations?.claude)
@@ -1940,7 +1940,7 @@ describe('ClaudianPlugin', () => {
         const persistedFailureSettings = JSON.parse(
           [...mockApp.vault.adapter.write.mock.calls]
             .reverse()
-            .find(([path]: [string]) => path === '.claudian/claudian-settings.json')?.[1]
+            .find(([path]: [string]) => path === '.claudian-omp/claudian-settings.json')?.[1]
             ?? '{}',
         );
         expect(persistedFailureSettings.pendingProviderSessionInvalidations?.claude)
@@ -2067,7 +2067,7 @@ describe('ClaudianPlugin', () => {
       const failedWrite = new Promise<void>((_resolve, reject) => { rejectWrite = reject; });
       let shouldFailSettingsWrite = true;
       mockApp.vault.adapter.write.mockImplementation(async (path: string) => {
-        if (path === '.claudian/claudian-settings.json' && shouldFailSettingsWrite) {
+        if (path === '.claudian-omp/claudian-settings.json' && shouldFailSettingsWrite) {
           shouldFailSettingsWrite = false;
           markWriteStarted();
           await failedWrite;
@@ -2133,7 +2133,7 @@ describe('ClaudianPlugin', () => {
         sessionId: null,
       }));
       expect(mockApp.vault.adapter.write.mock.calls.filter(
-        ([path]: [string]) => path === '.claudian/claudian-settings.json',
+        ([path]: [string]) => path === '.claudian-omp/claudian-settings.json',
       )).toHaveLength(1);
 
       const invalidateSpy = jest.spyOn(
@@ -2467,7 +2467,7 @@ describe('ClaudianPlugin', () => {
 
   describe('applyProviderRuntimeSettings', () => {
     it('persists a CLI fingerprint and restart-safe session invalidation atomically', async () => {
-      const settingsPath = '.claudian/claudian-settings.json';
+      const settingsPath = '.claudian-omp/claudian-settings.json';
       const deferredMetadata = {
         id: 'runtime-settings-restart-session',
         providerId: 'codex' as const,
@@ -2966,7 +2966,7 @@ describe('ClaudianPlugin', () => {
       expect(result?.id).toBe(conversation.id);
       expect(chatHostOf(plugin).getConversationList()).toHaveLength(1);
       expect(mockApp.vault.adapter.remove).not.toHaveBeenCalledWith(
-        '.claudian/sessions/session-removed-after-startup.meta.json',
+        '.claudian-omp/sessions/session-removed-after-startup.meta.json',
       );
       availabilitySpy.mockRestore();
     });
@@ -2993,7 +2993,7 @@ describe('ClaudianPlugin', () => {
         previousProviderSessionIds: ['session-from-previous-vault-path'],
       }));
       expect(mockApp.vault.adapter.remove).not.toHaveBeenCalledWith(
-        '.claudian/sessions/session-from-previous-vault-path.meta.json',
+        '.claudian-omp/sessions/session-from-previous-vault-path.meta.json',
       );
       availabilitySpy.mockRestore();
       loadSpy.mockRestore();
@@ -3615,7 +3615,7 @@ describe('ClaudianPlugin', () => {
     ];
 
     async function loadAllSessions(settings: Record<string, unknown>): Promise<Map<string, string>> {
-      const files = installVaultFiles({ '.claudian/claudian-settings.json': JSON.stringify(settings) });
+      const files = installVaultFiles({ '.claudian-omp/claudian-settings.json': JSON.stringify(settings) });
       jest.spyOn(SessionStorage.prototype, 'scan').mockImplementation(async (options) => {
         options?.onBatch?.(deviceMetadataRecords(...sessions));
         return { records: deviceMetadataRecords(...sessions), complete: true, invalidMetadataCount: 0 };

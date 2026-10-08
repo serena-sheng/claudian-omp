@@ -26,12 +26,12 @@ describe('buildOpencodeManagedConfig', () => {
   });
 
   it('pins the OpenCode build prompt to the managed prompt file', () => {
-    expect(buildOpencodeManagedConfig({}, '/vault/.claudian/opencode/system.md')).toEqual({
+    expect(buildOpencodeManagedConfig({}, '/vault/.claudian-omp/opencode/system.md')).toEqual({
       $schema: 'https://opencode.ai/config.json',
       agent: {
         plan: { disable: true },
         build: {
-          prompt: '{file:/vault/.claudian/opencode/system.md}',
+          prompt: '{file:/vault/.claudian-omp/opencode/system.md}',
         },
       },
     });
@@ -40,7 +40,7 @@ describe('buildOpencodeManagedConfig', () => {
   it('can create a dedicated aux agent and default it for the process', () => {
     expect(buildOpencodeManagedConfig(
       {},
-      '/vault/.claudian/opencode/auxiliary/system.md',
+      '/vault/.claudian-omp/opencode/auxiliary/system.md',
       [{
         definition: {
           mode: 'primary',
@@ -62,7 +62,7 @@ describe('buildOpencodeManagedConfig', () => {
             '*': 'deny',
             read: 'allow',
           },
-          prompt: '{file:/vault/.claudian/opencode/auxiliary/system.md}',
+          prompt: '{file:/vault/.claudian-omp/opencode/auxiliary/system.md}',
         },
       },
       default_agent: 'claudian-aux-readonly',
@@ -83,7 +83,7 @@ describe('buildOpencodeManagedConfig', () => {
 
     const config = buildOpencodeManagedConfig(
       baseConfig,
-      '/vault/.claudian/opencode/system.md',
+      '/vault/.claudian-omp/opencode/system.md',
       managedAgents,
     );
 
@@ -113,7 +113,7 @@ describe('buildOpencodeManagedConfig', () => {
         },
       },
       username: 'Existing',
-    }, '/vault/.claudian/opencode/system.md')).toEqual({
+    }, '/vault/.claudian-omp/opencode/system.md')).toEqual({
       $schema: 'https://opencode.ai/config.json',
       agent: {
         plan: { disable: true },
@@ -123,7 +123,7 @@ describe('buildOpencodeManagedConfig', () => {
             bash: 'ask',
             edit: 'ask',
           },
-          prompt: '{file:/vault/.claudian/opencode/system.md}',
+          prompt: '{file:/vault/.claudian-omp/opencode/system.md}',
         },
       },
       default_agent: 'build',
@@ -141,7 +141,7 @@ describe('prepareOpencodeLaunchArtifacts', () => {
   it('creates missing prompts without replacing existing ones when sessions supply instructions', async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'claudian-opencode-prompts-'));
     const base = { workspaceRoot: root, runtimeEnv: { HOME: root }, settings: { vaultPath: root } };
-    const prompts = path.join(root, '.claudian', 'opencode', 'prompts');
+    const prompts = path.join(root, '.claudian-omp', 'opencode', 'prompts');
     try {
       await prepareOpencodeLaunchArtifacts({ ...base, systemPromptText: 'Main instructions' });
       await prepareOpencodeLaunchArtifacts({ ...base, systemPromptText: 'Replacement', preserveExistingPrompts: true });
@@ -174,7 +174,7 @@ describe('prepareOpencodeLaunchArtifacts', () => {
       expect(inline.configPath).toBe(main.configPath);
       expect(title.configPath).toBe(main.configPath);
       expect(await fs.readFile(main.configPath, 'utf8')).toBe(config);
-      const prompts = path.join(root, '.claudian', 'opencode', 'prompts');
+      const prompts = path.join(root, '.claudian-omp', 'opencode', 'prompts');
       expect(await fs.readFile(path.join(prompts, 'main.md'), 'utf8')).toBe('Main instructions\n');
       expect(await fs.readFile(path.join(prompts, 'inline-edit.md'), 'utf8')).toBe('Inline edit instructions\n');
       expect(await fs.readFile(path.join(prompts, 'title.md'), 'utf8')).toBe('Title instructions\n');
@@ -225,8 +225,8 @@ describe('prepareOpencodeLaunchArtifacts', () => {
       workspaceRoot: tmpRoot,
     });
 
-    expect(result.configPath).toBe(path.join(tmpRoot, '.claudian', 'opencode', 'config.json'));
-    expect(result.systemPromptPath).toBe(path.join(tmpRoot, '.claudian', 'opencode', 'prompts', 'main.md'));
+    expect(result.configPath).toBe(path.join(tmpRoot, '.claudian-omp', 'opencode', 'config.json'));
+    expect(result.systemPromptPath).toBe(path.join(tmpRoot, '.claudian-omp', 'opencode', 'prompts', 'main.md'));
     expect(result.configContent).toContain(`"prompt": ${JSON.stringify(`{file:${result.systemPromptPath}}`)}`);
     const generatedConfig = JSON.parse(await fs.readFile(result.configPath, 'utf8'));
     // The original user document is loaded natively; the generated file owns only the overlay.
