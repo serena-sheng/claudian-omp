@@ -23,6 +23,8 @@ import {
   renderProviderModelEnablementWarning,
 } from '../../../shared/settings/ProviderModelEnablementWarning';
 import { renderProviderModelsSection } from '../../../shared/settings/ProviderModelsSection';
+import { renderProviderReadinessPanel } from '../../../shared/settings/ProviderReadinessPanel';
+import { CLI_PROVIDER_METADATA } from '../../cli/CLIProviderMetadataTable';
 import type { DshWorkspaceServices } from '../app/DshWorkspaceServices';
 import {
   getDshProviderSettings,
@@ -70,6 +72,7 @@ export const dshSettingsTabRenderer: ProviderSettingsTabRenderer = {
       },
     };
 
+    const readinessContainer = container.createDiv();
     const installationContainer = container.createDiv();
     const lastProviderWarning = renderLastEnabledProviderWarning(container);
 
@@ -83,19 +86,31 @@ export const dshSettingsTabRenderer: ProviderSettingsTabRenderer = {
       providerName: 'DeepSeek Harness',
     });
 
+    const inspectInstallation = async () => {
+      const settings = context.plugin.settings as unknown as Record<string, unknown>;
+      const config = getDshProviderSettings(settings);
+      return probeCLIInstallation({
+        path: await context.plugin.getResolvedProviderCliPath('dsh'),
+        configuredPath: config.cliPathsByHost[hostnameKey] || config.cliPath,
+        args: ['--version'],
+        env: { ...process.env, ...getRuntimeEnvironmentVariables(settings, 'dsh') },
+      });
+    };
+
+    const readiness = renderProviderReadinessPanel({
+      container: readinessContainer,
+      metadata: CLI_PROVIDER_METADATA.dsh,
+      providerName: 'DeepSeek Harness',
+      enabled: () => getDshProviderSettings(settingsBag).enabled,
+      inspectCLI: inspectInstallation,
+      modelCatalog: workspace.modelCatalog,
+      checkForUpdates: () => settingsBag.checkCliUpdates === true,
+    });
+
     renderCLIInstallationSetting({
       cliName: 'DeepSeek Harness',
       icon: DSH_PROVIDER_ICON,
-      inspect: async () => {
-        const settings = context.plugin.settings as unknown as Record<string, unknown>;
-        const config = getDshProviderSettings(settings);
-        return probeCLIInstallation({
-          path: await context.plugin.getResolvedProviderCliPath('dsh'),
-          configuredPath: config.cliPathsByHost[hostnameKey] || config.cliPath,
-          args: ['--version'],
-          env: { ...process.env, ...getRuntimeEnvironmentVariables(settings, 'dsh') },
-        });
-      },
+      inspect: inspectInstallation,
       container: installationContainer,
       enablement,
       getValue: () => {
@@ -145,7 +160,16 @@ export const dshSettingsTabRenderer: ProviderSettingsTabRenderer = {
       renderCustomContextLimits: target => context.renderCustomContextLimits(target, DSH_PROVIDER_ID),
       scope: 'provider:dsh',
     });
-    return modelPicker;
+    return {
+      refresh: () => {
+        modelPicker.refresh();
+        void readiness.refresh();
+      },
+      dispose: () => {
+        modelPicker.dispose();
+        readiness.dispose();
+      },
+    };
   },
 };
 
