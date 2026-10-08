@@ -13,6 +13,11 @@ import { providerOutputEventToStreamChunk } from '@/features/chat/rendering/prov
 import { OpencodeExecutionBackend } from '@/providers/opencode/execution/OpencodeExecutionBackend';
 import { OpencodeServerService } from '@/providers/opencode/http/OpencodeServerService';
 
+// Spawns a fake native process and drives it over a real local HTTP server per
+// test, so the 5s default is too tight for shared CI runners. 30s matches the
+// repo convention for process-heavy integration tests (ManagedStdioProcess).
+jest.setTimeout(30_000);
+
 // Native HTTP boundary, based on v2.0.12 event and route contracts.
 const fixture = `#!/usr/bin/env node
 const http = require('node:http');
