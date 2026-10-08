@@ -17,6 +17,8 @@ import {
   renderProviderModelEnablementWarning,
 } from '../../../shared/settings/ProviderModelEnablementWarning';
 import { renderProviderModelsSection } from '../../../shared/settings/ProviderModelsSection';
+import { renderProviderReadinessPanel } from '../../../shared/settings/ProviderReadinessPanel';
+import { CLI_PROVIDER_METADATA } from '../../cli/CLIProviderMetadataTable';
 import { getCodexModelOptions } from '../modelOptions';
 import { isWindowsStyleCLIReference } from '../runtime/CodexBinaryLocator';
 import { inspectCodexInstallation } from '../runtime/CodexCLIInstallation';
@@ -67,6 +69,7 @@ export function createCodexSettingsTabRenderer(
         },
       };
 
+      const readinessContainer = container.createDiv();
       const installationContainer = container.createDiv();
       const lastProviderWarning = renderLastEnabledProviderWarning(container);
 
@@ -75,6 +78,17 @@ export function createCodexSettingsTabRenderer(
         getIsEnabled: () => getCodexProviderSettings(settingsBag).enabled,
         providerId: 'codex',
         providerName: 'Codex CLI',
+      });
+
+      const inspectInstallation = () => inspectCodexInstallation(context.plugin);
+      const readiness = renderProviderReadinessPanel({
+        container: readinessContainer,
+        metadata: CLI_PROVIDER_METADATA.codex,
+        providerName: 'Codex CLI',
+        enabled: () => getCodexProviderSettings(settingsBag).enabled,
+        inspectCLI: inspectInstallation,
+        modelCatalog: codexWorkspace.modelCatalog,
+        checkForUpdates: () => settingsBag.checkCliUpdates === true,
       });
 
       if (isWindowsHost) {
@@ -150,7 +164,7 @@ export function createCodexSettingsTabRenderer(
       const cliPathControl = renderCLIInstallationSetting({
         cliName: 'Codex CLI',
         icon: OPENAI_PROVIDER_ICON,
-        inspect: () => inspectCodexInstallation(context.plugin),
+        inspect: inspectInstallation,
         container: installationContainer,
         enablement,
         getValue: () => {
@@ -340,7 +354,16 @@ export function createCodexSettingsTabRenderer(
         placeholder: `OPENAI_API_KEY=your-key\nOPENAI_BASE_URL=https://api.openai.com/v1\nCODEX_SANDBOX=workspace-write`,
         renderCustomContextLimits: (target) => context.renderCustomContextLimits(target, 'codex'),
       });
-      return modelPicker;
+      return {
+        refresh: () => {
+          modelPicker.refresh();
+          void readiness.refresh();
+        },
+        dispose: () => {
+          modelPicker.dispose();
+          readiness.dispose();
+        },
+      };
     },
   };
 }

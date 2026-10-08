@@ -22,6 +22,8 @@ import {
   renderProviderModelEnablementWarning,
 } from '../../../shared/settings/ProviderModelEnablementWarning';
 import { renderProviderModelsSection } from '../../../shared/settings/ProviderModelsSection';
+import { renderProviderReadinessPanel } from '../../../shared/settings/ProviderReadinessPanel';
+import { CLI_PROVIDER_METADATA } from '../../cli/CLIProviderMetadataTable';
 import { buildOmpEnvironment } from '../runtime/OmpLaunchSpecBuilder';
 import { resolveOmpProcessSpec } from '../runtime/OmpSubprocess';
 import {
@@ -69,6 +71,7 @@ export function createOmpSettingsTabRenderer(
         },
       };
 
+      const readinessContainer = container.createDiv();
       const installationContainer = container.createDiv();
       const lastProviderWarning = renderLastEnabledProviderWarning(container);
 
@@ -79,20 +82,32 @@ export function createOmpSettingsTabRenderer(
         providerName: 'OMP',
       });
 
+      const inspectInstallation = async () => {
+        const settings = context.plugin.settings as unknown as Record<string, unknown>;
+        const config = getOmpProviderSettings(settings);
+        return probeCLIInstallation({
+          path: await context.plugin.getResolvedProviderCliPath('omp'),
+          configuredPath: config.cliPathsByHost[hostnameKey] || config.cliPath,
+          args: ['--version'],
+          env: buildOmpEnvironment(process.env, getRuntimeEnvironmentVariables(settings, 'omp')),
+          prepareLaunch: (spec) => ({ ...spec, ...resolveOmpProcessSpec(spec, spec.env.PATH ?? '') }),
+        });
+      };
+
+      const readiness = renderProviderReadinessPanel({
+        container: readinessContainer,
+        metadata: CLI_PROVIDER_METADATA.omp,
+        providerName: 'OMP',
+        enabled: () => getOmpProviderSettings(settingsBag).enabled,
+        inspectCLI: inspectInstallation,
+        modelCatalog: workspace.modelCatalog,
+        checkForUpdates: () => settingsBag.checkCliUpdates === true,
+      });
+
       renderCLIInstallationSetting({
         cliName: 'OMP',
         icon: OMP_PROVIDER_ICON,
-        inspect: async () => {
-          const settings = context.plugin.settings as unknown as Record<string, unknown>;
-          const config = getOmpProviderSettings(settings);
-          return probeCLIInstallation({
-            path: await context.plugin.getResolvedProviderCliPath('omp'),
-            configuredPath: config.cliPathsByHost[hostnameKey] || config.cliPath,
-            args: ['--version'],
-            env: buildOmpEnvironment(process.env, getRuntimeEnvironmentVariables(settings, 'omp')),
-            prepareLaunch: (spec) => ({ ...spec, ...resolveOmpProcessSpec(spec, spec.env.PATH ?? '') }),
-          });
-        },
+        inspect: inspectInstallation,
         container: installationContainer,
         enablement,
         getValue: () => {
@@ -139,7 +154,16 @@ export function createOmpSettingsTabRenderer(
         plugin: context.plugin,
         scope: 'provider:omp',
       });
-      return modelPicker;
+      return {
+        refresh: () => {
+          modelPicker.refresh();
+          void readiness.refresh();
+        },
+        dispose: () => {
+          modelPicker.dispose();
+          readiness.dispose();
+        },
+      };
     },
   };
 }

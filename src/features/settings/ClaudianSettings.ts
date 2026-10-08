@@ -82,6 +82,24 @@ export class ClaudianSettingTab extends PluginSettingTab {
       cls: `claudian-settings-tab-content${this.activeTab === 'providers' ? ' claudian-settings-tab-content--active' : ''}`,
     });
     tabContents.set('providers', providersContent);
+
+    // Opt-in network access shared by every provider's readiness panel.
+    const updateCheckGroup = providersContent.createDiv({ cls: 'claudian-settings-group' });
+    updateCheckGroup.setAttribute('role', 'group');
+    updateCheckGroup.setAttribute('aria-label', t('settings.cliUpdates.name'));
+    new Setting(updateCheckGroup.createDiv({ cls: 'claudian-settings-group-body' }))
+      .setName(t('settings.cliUpdates.name'))
+      .setDesc(t('settings.cliUpdates.desc'))
+      .addToggle(toggle => toggle
+        .setValue(this.host.settings.checkCliUpdates === true)
+        .onChange(async value => {
+          await this.host.mutateSettings(settings => {
+            settings.checkCliUpdates = value;
+          });
+          // Panels read the setting live, so refresh the ones already on screen.
+          for (const handle of this.providerSettingsRenders.values()) handle.refresh();
+        }));
+
     const providerTabBar = providersContent.createDiv({
       cls: 'claudian-settings-provider-tabs',
     });

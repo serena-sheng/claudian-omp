@@ -22,6 +22,8 @@ import {
   renderProviderModelEnablementWarning,
 } from '../../../shared/settings/ProviderModelEnablementWarning';
 import { renderProviderModelsSection } from '../../../shared/settings/ProviderModelsSection';
+import { renderProviderReadinessPanel } from '../../../shared/settings/ProviderReadinessPanel';
+import { CLI_PROVIDER_METADATA } from '../../cli/CLIProviderMetadataTable';
 import { resolvePiProcessSpec } from '../runtime/PiSubprocess';
 import {
   getPiProviderSettings,
@@ -68,6 +70,7 @@ export function createPiSettingsTabRenderer(
         },
       };
 
+      const readinessContainer = container.createDiv();
       const installationContainer = container.createDiv();
       const lastProviderWarning = renderLastEnabledProviderWarning(container);
 
@@ -78,20 +81,32 @@ export function createPiSettingsTabRenderer(
         providerName: 'Pi',
       });
 
+      const inspectInstallation = async () => {
+        const settings = context.plugin.settings as unknown as Record<string, unknown>;
+        const config = getPiProviderSettings(settings);
+        return probeCLIInstallation({
+          path: await context.plugin.getResolvedProviderCliPath('pi'),
+          configuredPath: config.cliPathsByHost[hostnameKey] || config.cliPath,
+          args: ['--version'],
+          env: { ...process.env, ...getRuntimeEnvironmentVariables(settings, 'pi') },
+          prepareLaunch: (spec) => ({ ...spec, ...resolvePiProcessSpec(spec, spec.env.PATH ?? '') }),
+        });
+      };
+
+      const readiness = renderProviderReadinessPanel({
+        container: readinessContainer,
+        metadata: CLI_PROVIDER_METADATA.pi,
+        providerName: 'Pi',
+        enabled: () => getPiProviderSettings(settingsBag).enabled,
+        inspectCLI: inspectInstallation,
+        modelCatalog: workspace.modelCatalog,
+        checkForUpdates: () => settingsBag.checkCliUpdates === true,
+      });
+
       renderCLIInstallationSetting({
         cliName: 'Pi',
         icon: PI_PROVIDER_ICON,
-        inspect: async () => {
-          const settings = context.plugin.settings as unknown as Record<string, unknown>;
-          const config = getPiProviderSettings(settings);
-          return probeCLIInstallation({
-            path: await context.plugin.getResolvedProviderCliPath('pi'),
-            configuredPath: config.cliPathsByHost[hostnameKey] || config.cliPath,
-            args: ['--version'],
-            env: { ...process.env, ...getRuntimeEnvironmentVariables(settings, 'pi') },
-            prepareLaunch: (spec) => ({ ...spec, ...resolvePiProcessSpec(spec, spec.env.PATH ?? '') }),
-          });
-        },
+        inspect: inspectInstallation,
         container: installationContainer,
         enablement,
         getValue: () => {
@@ -138,7 +153,16 @@ export function createPiSettingsTabRenderer(
         plugin: context.plugin,
         scope: 'provider:pi',
       });
-      return modelPicker;
+      return {
+        refresh: () => {
+          modelPicker.refresh();
+          void readiness.refresh();
+        },
+        dispose: () => {
+          modelPicker.dispose();
+          readiness.dispose();
+        },
+      };
     },
   };
 }

@@ -192,6 +192,13 @@ export interface ClaudianSettings {
   // Provider command visibility
   hiddenCommands: string[];
 
+  /**
+   * Opt-in network access: when true, provider readiness panels offer a
+   * "check for update" action that queries registry.npmjs.org for the latest
+   * published CLI version. Off by default so the plugin makes no network calls.
+   */
+  checkCliUpdates: boolean;
+
   // Allow provider-specific extension fields
   [key: string]: unknown;
 }

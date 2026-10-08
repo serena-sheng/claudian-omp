@@ -16,6 +16,8 @@ import { renderEnvironmentSettingsSection } from '../../../shared/settings/Envir
 import type { ProviderEnablementSettingOptions } from '../../../shared/settings/ProviderEnablementSetting';
 import { renderLastEnabledProviderWarning, renderProviderModelEnablementWarning } from '../../../shared/settings/ProviderModelEnablementWarning';
 import { renderProviderModelsSection } from '../../../shared/settings/ProviderModelsSection';
+import { renderProviderReadinessPanel } from '../../../shared/settings/ProviderReadinessPanel';
+import { CLI_PROVIDER_METADATA } from '../../cli/CLIProviderMetadataTable';
 import {
   getClaudeModelOptions,
 } from '../modelOptions';
@@ -68,6 +70,7 @@ export function createClaudeSettingsTabRenderer(
         },
       };
 
+      const readinessContainer = container.createDiv();
       const installationContainer = container.createDiv({ cls: 'claudian-claude-installation' });
       const lastProviderWarning = renderLastEnabledProviderWarning(container);
       const modelWarning = renderProviderModelEnablementWarning(container, context, {
@@ -94,19 +97,31 @@ export function createClaudeSettingsTabRenderer(
         return null;
       };
 
+      const inspectInstallation = async () => {
+        const settings = context.plugin.settings as unknown as Record<string, unknown>;
+        const config = getClaudeProviderSettings(settings);
+        return probeCLIInstallation({
+          path: await context.plugin.getResolvedProviderCliPath('claude'),
+          configuredPath: config.cliPathsByHost[hostnameKey] || config.cliPath,
+          args: ['--version'],
+          env: { ...process.env, ...getRuntimeEnvironmentVariables(settings, 'claude') },
+        });
+      };
+
+      const readiness = renderProviderReadinessPanel({
+        container: readinessContainer,
+        metadata: CLI_PROVIDER_METADATA.claude,
+        providerName: 'Claude Code',
+        enabled: () => getClaudeProviderSettings(settingsBag).enabled,
+        inspectCLI: inspectInstallation,
+        modelCatalog: claudeWorkspace.modelCatalog,
+        checkForUpdates: () => settingsBag.checkCliUpdates === true,
+      });
+
       renderCLIInstallationSetting({
         cliName: 'Claude Code',
         icon: CLAUDE_PROVIDER_ICON,
-        inspect: async () => {
-          const settings = context.plugin.settings as unknown as Record<string, unknown>;
-          const config = getClaudeProviderSettings(settings);
-          return probeCLIInstallation({
-            path: await context.plugin.getResolvedProviderCliPath('claude'),
-            configuredPath: config.cliPathsByHost[hostnameKey] || config.cliPath,
-            args: ['--version'],
-            env: { ...process.env, ...getRuntimeEnvironmentVariables(settings, 'claude') },
-          });
-        },
+        inspect: inspectInstallation,
         container: installationContainer,
         enablement,
         getValue: () => {
@@ -240,7 +255,16 @@ export function createClaudeSettingsTabRenderer(
             })
         );
 
-      return modelPicker;
+      return {
+        refresh: () => {
+          modelPicker.refresh();
+          void readiness.refresh();
+        },
+        dispose: () => {
+          modelPicker.dispose();
+          readiness.dispose();
+        },
+      };
     },
   };
 }

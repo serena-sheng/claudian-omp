@@ -67,4 +67,7 @@ export const DEFAULT_CLAUDIAN_SETTINGS: ClaudianSettings = {
   pinnedLinkedContentPaths: [],
 
   hiddenCommands: [],
+
+  // Off by default: no registry lookups until the user opts in.
+  checkCliUpdates: false,
 };

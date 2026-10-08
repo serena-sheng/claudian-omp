@@ -111,6 +111,57 @@
     }
   },
   "settings": {
+    "readiness": {
+      "heading": "준비 상태",
+      "refresh": "다시 확인",
+      "checking": "확인 중…",
+      "checkFailed": "준비 상태를 확인할 수 없습니다",
+      "status": {
+        "ready": "준비됨",
+        "attention": "확인 필요",
+        "blocked": "사용 불가",
+        "disabled": "사용 안 함"
+      },
+      "check": {
+        "enabled": "제공자 활성화",
+        "cli": "CLI 사용 가능",
+        "models": "모델 카탈로그",
+        "selection": "모델 선택됨"
+      },
+      "detail": {
+        "enabled": "활성화됨",
+        "disabled": "사용 안 함",
+        "cliFound": "v{version} · {path}",
+        "cliNoVersion": "{path} · 버전을 읽을 수 없음",
+        "cliMissing": "PATH에서 찾을 수 없음",
+        "models": "모델 {count}개 발견",
+        "modelsNone": "아직 발견된 모델이 없음",
+        "selection": "모델 {count}개 활성화됨",
+        "selectionNone": "활성화된 모델이 없음"
+      },
+      "remedy": {
+        "enable": "{provider}를 켜면 사용할 수 있습니다.",
+        "cliMissing": "{name}을(를) 찾을 수 없습니다. 설치한 뒤 다시 확인하세요. Claudian은 설치를 대신 실행하지 않습니다:",
+        "cliUnreadable": "CLI를 찾았지만 버전을 읽지 못했습니다. 아래 경로를 확인하세요.",
+        "refreshModels": "아래 '모델'을 열고 모델 카탈로그를 새로 고치세요.",
+        "selectModel": "아래 '모델'에서 모델을 하나 이상 활성화하세요."
+      },
+      "action": {
+        "copy": "복사",
+        "copied": "복사됨",
+        "checkUpdate": "업데이트 확인"
+      },
+      "update": {
+        "checking": "npm 확인 중…",
+        "available": "새 버전 {version}이 있습니다. 다음 명령으로 업데이트하세요:",
+        "latest": "최신 버전입니다(최신 {version}).",
+        "unavailable": "npm 레지스트리에 연결할 수 없습니다."
+      }
+    },
+    "cliUpdates": {
+      "name": "Check CLI updates",
+      "desc": "Show a \"Check for update\" button in each provider's readiness panel. Pressing it queries registry.npmjs.org for the latest published version of that provider's CLI package. Off by default: Claudian makes no registry request unless you enable this."
+    },
     "tabs": {
       "general": "일반",
       "providers": "제공자",
