@@ -19,7 +19,7 @@ function shouldSendMessageFromExplicitEnterShortcut(event: KeyboardEvent): boole
   return isEnterWithoutShiftOrComposition(event) && hasPlatformSendModifier(event);
 }
 
-function shouldSendMessageFromEnterKey(
+export function shouldSendMessageFromEnterKey(
   event: KeyboardEvent,
   settings: Pick<ClaudianSettings, 'requireCommandOrControlEnterToSend'>,
 ): boolean {

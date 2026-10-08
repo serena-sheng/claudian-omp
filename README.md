@@ -1,204 +1,90 @@
-# Claudian
+# Claudian OMP
 
-<p>
-  <a href="https://trendshift.io/repositories/21115?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-21115">
-    <img align="right" src="https://trendshift.io/api/badge/repositories/21115" alt="Claudian on Trendshift" width="180">
-  </a>
-  <img src="https://img.shields.io/github/stars/YishenTu/claudian" alt="GitHub stars" vspace="10">
-  <a href="https://community.obsidian.md/plugins/realclaudian">
-    <img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json&amp;query=%24%5B%22realclaudian%22%5D.downloads&amp;label=downloads&amp;logo=obsidian&amp;color=7C3AED" alt="Obsidian downloads" vspace="10">
-  </a>
-  <img src="https://img.shields.io/github/v/release/YishenTu/claudian" alt="GitHub release" vspace="10">
-  <img src="https://img.shields.io/github/license/YishenTu/claudian" alt="License" vspace="10">
-  <br clear="both">
-</p>
+An independent fork of [Claudian](https://github.com/YishenTu/claudian) by Yishen Tu.
+It keeps everything Claudian already does — chat tabs, inline editing, session manager,
+Zen mode, dual pane, side chat, agent skills, turn steering, subagent history — and adds
+extra agent harnesses plus a few enhancements borrowed from
+[oh-my-claudian](https://github.com/lee259/oh-my-claudian) by Lee.
 
-![Preview](assets/Preview.png)
-
-An Obsidian plugin that embeds AI coding agents (Claude Code, Codex CLI, Grok Build, OpenCode, Pi, and more to come) in your vault. Your vault becomes the agent's working directory — file read/write, search, bash, and multi-step workflows all work out of the box.
-
-## Features & Usage
-
-Open Claudian interface from the ribbon icon or command palette. Everything works like your familiar coding agent, Claude Code, Codex CLI, Grok Build, OpenCode, and Pi — talk to the agent, and it reads, writes, edits, searches and run commands in your vault.
-
-**Inline Edit** — Select text or start at the cursor position + hotkey to edit directly in notes with word-level diff preview.
-
-**Zen Mode** — Collapse the sidebar holding Claudian and the chat moves to a [compact composer](assets/zen-mode-collapsed.png) at the bottom of your notes, with a one-line activity preview and [the conversation one click away](assets/zen-mode-expanded.png).
-
-**Slash Commands & Skills** — Type `/` or `$` for reusable prompt templates or Skills from user- and vault-level scopes.
-
-**@mention** — Type `@` to reference vault files, folders and other Claudian sessions.
-
-**Side Chat (`/side` or `/btw`)** — Explore a separate, temporary conversation with follow-ups and tools while keeping the main chat unchanged.
-
-**MCP Servers** — Connect external tools through each coding agent's native CLI-managed MCP configuration.
-
-**Tabs & Session Management** — Use multiple tabs in [single-pane mode](assets/main-chat-single-pane.png) or a persistent session manager beside the chat in [dual-pane mode](assets/main-chat-dual-pane.png).
-
-**Collaboration** — Collab is now a standalone plugin. See [Claudian Collab](https://github.com/YishenTu/claudian-collab).
+Both upstream projects are MIT licensed; see NOTICE.md and LICENSE.
 
 ## Requirements
 
-- At least one of the following harnesses:
-  - [Claude Code](https://code.claude.com/docs/en/overview)
-  - [Codex CLI](https://github.com/openai/codex)
-  - [Grok Build](https://github.com/xai-org/grok-build)
-  - [OpenCode](https://github.com/anomalyco/opencode)
-  - [Pi](https://github.com/earendil-works/pi)
-- A compatible subscription or API provider, such as [OpenRouter](https://openrouter.ai/docs/guides/guides/claude-code-integration), [Kimi](https://platform.kimi.ai/docs/guide/claude-code-kimi), [GLM](https://docs.z.ai/devpack/tool/claude), or [DeepSeek](https://api-docs.deepseek.com/quick_start/agent_integrations/claude_code) etc.
 - Obsidian v1.13.0+
 - Desktop only (macOS, Linux, Windows)
+- At least one agent CLI installed locally, plus whatever subscription or API access that CLI needs
 
-Claudian now supports OpenCode v2, OpenCode v1 support will end on October 30, 2026. See the [OpenCode v2 migration guide](https://opencode.ai/v2/docs/migrate-v1).
+## Supported providers
 
-## Installation
+Each provider is a locally installed agent CLI. The plugin drives it as a subprocess;
+nothing is bundled and nothing is downloaded for you.
 
-### From Obsidian Community Plugins (recommended)
+| Provider | CLI | Notes |
+|---|---|---|
+| Claude Code | `claude` | `@anthropic-ai/claude-code` |
+| Codex CLI | `codex` | `@openai/codex` |
+| Grok Build | `grok` | speaks ACP |
+| OpenCode | `opencode` | speaks ACP |
+| Pi | `pi` | `@earendil-works/pi-coding-agent` |
+| **Oh My Pi (OMP)** | `omp` | `@oh-my-pi/pi-coding-agent` — install with the omp.sh install script |
+| **DeepSeek Harness** | `dsh` | `@deepseek-ai/dsh` — needs Node.js and a DeepSeek API key |
 
-1. Open Obsidian → Settings → Community plugins → Browse
-2. Search for "Claudian" and click Install
-3. Enable the plugin
+Providers can also be pointed at other model backends through their own configuration
+(for example running Claude Code against a non-Anthropic endpoint), which is covered by
+that CLI's own documentation.
 
-Or install directly from the [community plugin page](https://community.obsidian.md/plugins/realclaudian).
+## Disclosures
 
-### From source (development)
+Required by the Obsidian developer policies, and true as of this fork:
 
-1. Clone this repository into your vault's plugins folder:
-   ```bash
-   cd /path/to/vault/.obsidian/plugins
-   git clone https://github.com/YishenTu/claudian.git
-   cd claudian
-   ```
+- **Network use.** The plugin itself does not call the network. The agent CLIs it launches
+  do: they talk to their own model providers (Anthropic, OpenAI, xAI, DeepSeek, …) and to
+  any MCP servers you configure. Which services are contacted, and with which credentials,
+  is determined by those CLIs and by the environment variables you set in each provider's
+  settings.
+- **Files outside the vault.** Each agent CLI is started with your vault as its working
+  directory, but the CLIs may read and write outside it (their own config, credentials,
+  session stores and caches; OMP uses `~/.omp`, Pi uses `~/.pi`, DeepSeek Harness uses
+  `~/.dsh`). Session metadata is kept inside the vault under the plugin's own folder.
+- **Paid services.** Some providers require a paid subscription or API key. The plugin
+  does not sell anything and does not install or update any CLI for you.
+- **Desktop only.** `isDesktopOnly` is true: the plugin spawns subprocesses through Node
+  APIs and cannot work on mobile.
 
-2. Install dependencies and build:
-   ```bash
-   npm install
-   npm run build
-   ```
+## Installing
 
-3. Enable the plugin in Obsidian:
-   - Settings → Community plugins → Enable "Claudian"
+Not in the community directory — this is a fork, and Obsidian's developer policies require
+explicit permission from the original author before a fork may be listed there
+(https://docs.obsidian.md/community-directory/developer-policies). Until that is sorted
+out, install it manually or via BRAT:
 
-### Development
+1. Download `main.js`, `manifest.json` and `styles.css` from the latest release.
+2. Put them in `YOUR_VAULT/.obsidian/plugins/claudian-omp/`.
+3. Enable **Claudian OMP** in Settings, Community plugins.
 
-```bash
-# Watch mode
-npm run dev
+Do not enable this plugin and the upstream **Claudian** at the same time: they would both
+register a chat view and would fight over the same storage.
 
-# Production build
-npm run build
+## Building
+
+```sh
+npm ci
+npm run build      # produces main.js and styles.css in the repository root
 ```
 
-## Privacy & Data Use
+Requires Node.js 24.x. `npm run test:unit` runs the unit suite; `npm run typecheck` and
+`npm run lint` are also wired up.
 
-- **Sent to API**: Your input, attached files, images, and tool call outputs. Depending on the selected provider, data is sent to Anthropic (Claude), OpenAI (Codex), xAI (Grok), or the providers configured in OpenCode or Pi. The destination can be configured through provider settings and environment variables.
-- **No telemetry or unsolicited background activity**: Claudian does not run telemetry beacons. UI polling timers read local Obsidian/editor selection state only. Network activity is limited to explicit provider runtime work, configured MCP endpoints, provider SDK/CLI calls needed to answer your requests, and their configured services.
+## Configuration
 
-## Troubleshooting
+Settings live in `.claudian-omp/` inside your vault. The plugin stores its settings file,
+session metadata and cached catalogs there — separate from upstream Claudian, which uses
+`.claudian/`, so the two can coexist on disk without corrupting each other.
 
-The following sections use Claude Code as an example.
+## Credits
 
-### Provider CLI not found
-
-If Claudian cannot auto-detect a provider CLI, verify that the CLI is installed and available to GUI applications through PATH. Typical errors include `spawn claude ENOENT` and `Claude Code CLI not found`. This issue is common with Node version managers (nvm, fnm, volta).
-
-Leave the CLI path setting empty first so Claudian can auto-detect the CLI. If auto-detection fails, find the executable path and set it in Settings → Advanced → Claude Code CLI path.
-
-For Codex on macOS, auto-detection also checks ChatGPT.app in `/Applications` and `~/Applications`, including its nested `codex-cli/CodexCLI.app` runtime. A configured CLI path or shared PATH entry takes precedence.
-
-| Platform | Command | Example Path |
-|----------|---------|--------------|
-| macOS/Linux | `which claude` | `/Users/you/.volta/bin/claude` |
-| Windows (native) | `where.exe claude` | `C:\Users\you\AppData\Local\Claude\claude.exe` |
-| Windows (npm) | `npm root -g` | `{root}\@anthropic-ai\claude-code\cli-wrapper.cjs` |
-
-> **Note**: On Windows, avoid `.cmd` and `.ps1` wrappers. Use `claude.exe` for native installs, or `cli-wrapper.cjs` for package-manager installs. `cli.js` is only a legacy fallback for older Claude Code npm packages.
-
-**Alternative**: Add your Node.js bin directory to PATH in Settings → Environment → Custom variables.
-
-### npm CLI and Node.js not in the same directory
-
-When using an npm-installed provider CLI, make sure its executable and Node.js are available from the same environment. Check their paths:
-
-```bash
-dirname $(which claude)
-dirname $(which node)
-```
-
-If the paths differ, GUI apps like Obsidian may not find Node.js.
-
-Either:
-
-1. Install the native binary (recommended).
-2. Add the Node.js path in Settings → Environment: `PATH=/path/to/node/bin`.
-
-### More help
-
-For provider-specific installation and configuration guidance, refer to the provider documentation linked in the [Requirements](#requirements) section. If you have a feature request or run into a bug, please [submit a GitHub issue](https://github.com/YishenTu/claudian/issues).
-
-## Architecture
-
-```
-src/
-├── main.ts                      # Plugin entry point and sole composition root
-├── composition/                 # Host objects and view wiring shared by app and features
-├── app/                         # Startup, conversations, settings, and storage
-├── core/                        # Provider-neutral execution, registry, and type contracts
-│   ├── execution/               # Run, session snapshot, and interaction primitives
-│   ├── providers/               # Provider registry and workspace services
-│   ├── process/                 # CLI discovery and managed child processes
-│   ├── prompt/                  # Prompt and context encoding
-│   ├── auxiliary/               # Shared provider auxiliary services
-│   └── ...                      # bootstrap, commands, rpc, security, storage, tools, types
-├── providers/
-│   ├── claude/                  # Claude Agent SDK adaptor, native history, plugins
-│   ├── codex/                   # Codex shared app-server adaptor, JSON-RPC, JSONL history
-│   ├── grok/                    # Grok Build ACP adaptor, native history, models, and tools
-│   ├── opencode/                # OpenCode ACP and HTTP adaptors, shared server
-│   ├── pi/                      # Pi RPC adaptor, model discovery, JSONL history
-│   └── acp/                     # Agent Client Protocol shared mechanics
-├── features/
-│   ├── chat/                    # Sidebar chat: tabs, workspace lifecycle, controllers, renderers
-│   ├── inline-edit/             # Inline edit modal and provider-backed edit services
-│   └── settings/                # Settings shell, provider tabs, Vault skill management
-├── shared/                      # Reusable UI components, settings controls, mention/dropdown
-├── i18n/                        # Internationalization (10 locales)
-├── utils/                       # Domain-free leaf helpers
-└── style/                       # Modular CSS
-```
-
-## Contributing
-
-Issues and focused pull requests are welcome. Issues are the preferred starting point: describe the problem, reproduction steps, and environment clearly so it can be investigated.
-
-Before opening a pull request, please read the [contribution guide](CONTRIBUTING.md). Pull requests must explain the problem, the proposed solution, why the approach is appropriate, and how the change was validated. Pull requests that add a new provider are not accepted; the guide explains this maintenance and product-quality boundary in detail.
-
-## Star History
-
-<a href="https://www.star-history.com/?repos=YishenTu%2Fclaudian&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=YishenTu/claudian&type=date&theme=dark&legend=top-left&sealed_token=UAS9n3qO4GyhCCkOr9kcAl7msVtDEz-DoQTkpFuPrAELxMEK9PQWj9zG566afbx0CkF5OoIbLRkxiDIoMRCK5Q-HXbLUiimg1lT8wKDdcc_eP48_EodHFrR6UtY8jS7Mzik4lLd_sY8oVj2I42lISFB1tSlr4gnXwOCNwtTn6iQakbru7yKPIO3uVYpP" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=YishenTu/claudian&type=date&legend=top-left&sealed_token=UAS9n3qO4GyhCCkOr9kcAl7msVtDEz-DoQTkpFuPrAELxMEK9PQWj9zG566afbx0CkF5OoIbLRkxiDIoMRCK5Q-HXbLUiimg1lT8wKDdcc_eP48_EodHFrR6UtY8jS7Mzik4lLd_sY8oVj2I42lISFB1tSlr4gnXwOCNwtTn6iQakbru7yKPIO3uVYpP" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=YishenTu/claudian&type=date&legend=top-left&sealed_token=UAS9n3qO4GyhCCkOr9kcAl7msVtDEz-DoQTkpFuPrAELxMEK9PQWj9zG566afbx0CkF5OoIbLRkxiDIoMRCK5Q-HXbLUiimg1lT8wKDdcc_eP48_EodHFrR6UtY8jS7Mzik4lLd_sY8oVj2I42lISFB1tSlr4gnXwOCNwtTn6iQakbru7yKPIO3uVYpP" />
- </picture>
-</a>
-
-## Sponsorship
-
-### Kimi (Moonshot AI)
-
-<img src="https://gcdn.moonshot.cn/growth-cdn/sponsor/kimi-en.png" alt="Kimi (Moonshot AI)" width="90%">
-
-Thanks Kimi (Moonshot AI) for supporting Claudian! Try a **Kimi Code plan** ([CN](https://www.kimi.com/code?aff=claudian) | [Global](https://www.kimi.ai/code?aff=claudian)), or use the **API** through the Kimi Open Platform ([CN](https://platform.kimi.com?track_id=track-8415973bd2f5424dadf3cee1cdbacaca&aff=claudian) | [Global](https://platform.kimi.ai?track_id=track-39fcfe097e114d8b8ca8fbcd1abf7266&aff=claudian)). New users receive bonus API credits equal to 10% of their first successful top-up. This offer ends December 31, 2026. Claudian receives no affiliate commission from these links.
-
-### Ke Holdings Inc. (BEIKE)
-
-<img src="assets/sponsors/MOMA.png" alt="MOMA" width="90%">
-
-Claudian is proudly sponsored by Ke Holdings Inc. (BEIKE) and the MOMA team. Their support helps Claudian continue to improve through ongoing development and maintenance.
-
-> Want to support Claudian or appear here? Contact me: [tysk01213@gmail.com](mailto:tysk01213@gmail.com).
-
-## License
-
-Licensed under the [MIT License](LICENSE).
+- [Claudian](https://github.com/YishenTu/claudian) — Yishen Tu (MIT). The architecture,
+  the provider framework, the chat UI and most provider implementations are theirs.
+- [oh-my-claudian](https://github.com/lee259/oh-my-claudian) — Lee (MIT). Several
+  enhancements in this fork were ported from it, and it was the reference for the OMP and
+  DeepSeek Harness providers.

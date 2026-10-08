@@ -20,6 +20,7 @@ import { ComposerInfoRow } from '@/features/chat/composer/ComposerInfoRow';
 import { ComposerPromptSuggestion } from '@/features/chat/composer/ComposerPromptSuggestion';
 import { FileContextManager } from '@/features/chat/composer/FileContextManager';
 import { ImageContextManager } from '@/features/chat/composer/ImageContextManager';
+import { InstructionModeManager } from '@/features/chat/composer/InstructionModeManager';
 import { MainChatComposerDropdown } from '@/features/chat/composer/MainChatComposerDropdown';
 import { installTextareaSizing } from '@/features/chat/composer/textareaSizing';
 import { createInputToolbar } from '@/features/chat/composer/toolbar/InputToolbar';
@@ -32,6 +33,7 @@ import type {
   TabRuntimeConstructionContext,
   TabRuntimeShellBundle,
 } from '@/features/chat/tabs/runtime/TabRuntimeConstruction';
+import { shouldSendMessageFromEnterKey } from '@/features/chat/tabs/TabInputEvents';
 import { commitProvisionalTab } from '@/features/chat/tabs/TabLifecycle';
 import { TabModelSelectionCoordinator } from '@/features/chat/tabs/TabModelSelectionCoordinator';
 import { syncTabProviderServices } from '@/features/chat/tabs/tabProviderLifecycle';
@@ -42,6 +44,7 @@ import type {
   TabServices,
   TabUIComponents,
 } from '@/features/chat/tabs/types';
+import { t } from '@/i18n/i18n';
 
 function buildContextManagers(
   options: TabRuntimeConstructionContext,
@@ -417,6 +420,20 @@ export function buildTabRuntimeUI(
     dom.messagesEl,
   );
   options.registerCleanup('tab navigation sidebar', () => navigationSidebar.destroy());
+  const instructionModeManager = new InstructionModeManager(
+    dom.inputEl,
+    t('chat.instructionMode.placeholder'),
+    {
+      getInputWrapper: () => dom.inputWrapper,
+      onSubmit: rawInstruction => runtimeRef.requirePublished()
+        .controllers.inputController.submitInstruction(rawInstruction),
+      shouldSubmitOnEnter: event => shouldSendMessageFromEnterKey(event, plugin.settings),
+      restorePlaceholder: () => {
+        runtimeRef.current()?.controllers.sideChatController.restoreComposerPlaceholder();
+      },
+    },
+  );
+  options.registerCleanup('tab instruction mode', () => instructionModeManager.destroy());
 
   const ui: TabUIComponents = {
     promptSuggestion: new ComposerPromptSuggestion(dom.inputEl, () => {
@@ -426,6 +443,7 @@ export function buildTabRuntimeUI(
         // The resume picker removes the input's aria-expanded instead of setting it.
         && !tab.controllers.builtInCommandController.isResumeDropdownVisible();
     }, dom.inputContainerEl),
+    instructionModeManager,
     contextTray,
     ...contextManagers,
     modelSelector: toolbar.modelSelector,

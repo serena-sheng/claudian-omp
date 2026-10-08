@@ -147,6 +147,8 @@ export interface ClaudianSettings {
   // UI settings
   keyboardNavigation: KeyboardNavigationSettings;
   requireCommandOrControlEnterToSend: boolean;
+  /** Type # in an empty composer to refine a rough instruction before sending. */
+  enableInstructionMode: boolean;
 
   // Internationalization
   locale: string;

@@ -17,11 +17,13 @@ import type { ChatFeatureHost } from '@/features/chat/ChatFeatureHost';
 import type { ChatSettings } from '@/features/chat/ChatSettings';
 import type { ComposerDraftController } from '@/features/chat/composer/ComposerDraftController';
 import { findComposerSessionMentions } from '@/features/chat/composer/composerSessionMentions';
+import type { InstructionModeManager } from '@/features/chat/composer/InstructionModeManager';
 import type { ConversationController } from '@/features/chat/conversation/ConversationController';
 import { FirstTurnAdmission } from '@/features/chat/conversation/FirstTurnAdmission';
 import type { ChatExecutionCoordinator } from '@/features/chat/execution/ChatExecutionCoordinator';
 import type { BuiltInCommandController } from '@/features/chat/input/BuiltInCommandController';
 import type { ComposerSelections } from '@/features/chat/input/ComposerSelections';
+import { InstructionSubmissionController } from '@/features/chat/input/InstructionSubmissionController';
 import { resolveSessionMentions } from '@/features/chat/input/resolveSessionMentions';
 import { SubmissionPreparations } from '@/features/chat/input/SubmissionPreparations';
 import { deliverAsyncQuestion } from '@/features/chat/interactions/asyncQuestionDelivery';
@@ -67,6 +69,7 @@ export interface InputControllerDeps {
   getTabProviderId: () => ProviderId | null;
   /** Returns true if ready. */
   ensureExecutionInitialized: () => Promise<boolean>;
+  getInstructionModeManager?: () => InstructionModeManager | null;
   builtInCommands: Pick<BuiltInCommandController, 'execute'>;
   /** Captures a review reporter when a terminal provider turn becomes visible. */
   captureReviewableSettlement?: (outcome: TabReviewOutcome) => () => void;
@@ -106,6 +109,7 @@ export class InputController {
   private readonly steering: TurnSteering;
   private readonly execution: MainTurnExecution;
   private readonly preparations = new SubmissionPreparations();
+  private readonly instructionRefine: InstructionSubmissionController;
 
   constructor(deps: InputControllerDeps) {
     this.deps = deps;
@@ -181,6 +185,14 @@ export class InputController {
       canStartTurn: () => this.deps.canStartTurn(),
       onInvalidated: () => this.asyncQuestions.expireAll(),
     });
+    this.instructionRefine = new InstructionSubmissionController({
+      plugin: deps.plugin,
+      getInputEl: deps.getInputEl,
+      getInstructionModeManager: () => deps.getInstructionModeManager?.() ?? null,
+      getTabProviderId: deps.getTabProviderId,
+      getModelOverride: () => deps.getSettings().model || undefined,
+      ensureExecutionInitialized: deps.ensureExecutionInitialized,
+    });
   }
 
   #getActiveProviderId(): ProviderId {
@@ -196,6 +208,16 @@ export class InputController {
   // ============================================
   // Message Sending
   // ============================================
+
+  /** Instruction-mode submission: refines the raw text and backfills the composer. */
+  async submitInstruction(rawInstruction: string): Promise<void> {
+    await this.instructionRefine.submit(rawInstruction);
+  }
+
+  /** Releases any parked instruction-refine conversation (tab teardown). */
+  cancelInstructionRefinement(): void {
+    this.instructionRefine.cancel();
+  }
 
   async sendMessage(options?: SendMessageOptions): Promise<void> {
     let queued = false;

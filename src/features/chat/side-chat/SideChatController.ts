@@ -48,7 +48,7 @@ export class SideChatController {
   #runtime: SideChatRuntime | null = null;
   #collapsedHost: HTMLElement | null = null;
   #boundConversationId: string | null = null;
-  #mainPlaceholder: string | null = null;
+  readonly #mainPlaceholder: string;
   #startSequence = 0;
   #starting = false;
   #startingCommand: SideChatCommandSubmission | null = null;
@@ -56,7 +56,20 @@ export class SideChatController {
   #previewActive = false;
   #disposed = false;
 
-  constructor(private readonly deps: SideChatControllerDeps) {}
+  constructor(private readonly deps: SideChatControllerDeps) {
+    this.#mainPlaceholder = deps.getInputEl().placeholder;
+  }
+
+  /**
+   * Re-applies the composer placeholder for the current destination. Instruction
+   * mode defers here on exit instead of caching a placeholder of its own.
+   */
+  restoreComposerPlaceholder(): void {
+    const inputEl = this.deps.getInputEl();
+    inputEl.placeholder = this.destination === 'side'
+      ? t('chat.sideChat.placeholder')
+      : this.#mainPlaceholder;
+  }
 
   get hasSideChat(): boolean {
     return this.#runtime !== null || this.#starting;
@@ -382,11 +395,10 @@ export class SideChatController {
 
     const inputEl = this.deps.getInputEl();
     if (isSide) {
-      this.#mainPlaceholder ??= inputEl.placeholder;
       inputEl.placeholder = t('chat.sideChat.placeholder');
       inputEl.setAttribute('aria-label', t('chat.sideChat.composerLabel'));
     } else {
-      if (this.#mainPlaceholder !== null) inputEl.placeholder = this.#mainPlaceholder;
+      inputEl.placeholder = this.#mainPlaceholder;
       inputEl.removeAttribute('aria-label');
     }
   }

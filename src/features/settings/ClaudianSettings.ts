@@ -586,6 +586,19 @@ export class ClaudianSettingTab extends PluginSettingTab {
       });
 
     new Setting(container)
+      .setName(t('settings.instructionMode.name'))
+      .setDesc(t('settings.instructionMode.desc'))
+      .addToggle((toggle) => {
+        toggle
+          .setValue(this.host.settings.enableInstructionMode ?? false)
+          .onChange(async (value) => {
+            await this.host.mutateSettings((settings) => {
+              settings.enableInstructionMode = value;
+            });
+          });
+      });
+
+    new Setting(container)
       .setName(t('settings.navMappings.name'))
       .setDesc(t('settings.navMappings.desc'))
       .setClass('claudian-settings-textarea')

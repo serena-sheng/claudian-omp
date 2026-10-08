@@ -89,6 +89,25 @@
       "toolCompleted": "{tool} · 완료",
       "toolFailed": "{tool} · 실패",
       "toolBlocked": "{tool} · 차단됨"
+    },
+    "instructionMode": {
+      "placeholder": "# Refine an instruction into a prompt",
+      "unsupportedProvider": "Instruction mode is not supported by this provider.",
+      "initFailed": "Failed to initialize instruction refinement. Please try again.",
+      "noResult": "No refined instruction received.",
+      "failed": "Failed to refine instruction: {error}",
+      "applied": "Refined prompt inserted into the composer.",
+      "modal": {
+        "title": "Refine instruction",
+        "yourInput": "Your input:",
+        "processing": "Refining your instruction...",
+        "yourResponse": "Your response:",
+        "responsePlaceholder": "Provide more details...",
+        "refinedPrompt": "Refined prompt:",
+        "submit": "Submit",
+        "accept": "Use prompt",
+        "preview": "Preview"
+      }
     }
   },
   "settings": {
@@ -138,6 +157,10 @@
       "desc": "대화 제목을 자동 생성하는 데 사용되는 모델.",
       "select": "모델 선택",
       "unavailableWarning": "자동 제목 생성이 일시 중지되었습니다. 사용 가능한 제목 모델을 선택하세요."
+    },
+    "instructionMode": {
+      "name": "Instruction mode",
+      "desc": "Type # in an empty composer to refine a rough instruction into a polished prompt before sending."
     },
     "navMappings": {
       "name": "Vim 스타일 네비게이션 매핑",

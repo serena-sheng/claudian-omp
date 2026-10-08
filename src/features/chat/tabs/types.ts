@@ -6,6 +6,7 @@ import type { ComposerContextTray } from '@/features/chat/composer/ComposerConte
 import type { ComposerPromptSuggestion } from '@/features/chat/composer/ComposerPromptSuggestion';
 import type { FileContextManager } from '@/features/chat/composer/FileContextManager';
 import type { ImageContextManager } from '@/features/chat/composer/ImageContextManager';
+import type { InstructionModeManager } from '@/features/chat/composer/InstructionModeManager';
 import type { MainChatComposerDropdown } from '@/features/chat/composer/MainChatComposerDropdown';
 import type { ContextUsageMeter } from '@/features/chat/composer/toolbar/ContextUsageMeter';
 import type { EffortSelector } from '@/features/chat/composer/toolbar/EffortSelector';
@@ -90,6 +91,7 @@ export interface TabServices {
  */
 export interface TabUIComponents {
   readonly promptSuggestion: ComposerPromptSuggestion;
+  readonly instructionModeManager: InstructionModeManager;
   readonly contextTray: ComposerContextTray;
   readonly fileContextManager: FileContextManager;
   readonly linkedContentController: LinkedContentController;

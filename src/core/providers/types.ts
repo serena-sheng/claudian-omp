@@ -41,7 +41,8 @@ export interface ProviderCapabilities {
   supportsImageAttachments: boolean;
   supportsTurnSteer?: boolean;
   supportsFastMode?: boolean;
-  /** Can report authoritative main-agent output tokens and elapsed turn time. */
+  /** Composer instruction mode can refine drafts through auxiliary execution. */
+  supportsInstructionMode?: boolean;
   supportsResponseThroughput?: boolean;
   reasoningControl: 'effort' | 'none';
 }
@@ -659,6 +660,26 @@ export interface TitleGenerationService {
     userMessage: string,
     callback: TitleGenerationCallback
   ): Promise<void>;
+  cancel(): void;
+}
+
+// -- Instruction refinement --
+
+export interface InstructionRefineOutcome {
+  success: boolean;
+  resetRequired?: false;
+  refinedInstruction?: string;
+  clarification?: string;
+  error?: string;
+}
+
+export type InstructionRefineResult = InstructionRefineOutcome | AuxiliaryContinuityReset;
+
+export interface InstructionRefineService {
+  setModelOverride?(model?: string): void;
+  resetConversation(): void;
+  refineInstruction(rawInstruction: string): Promise<InstructionRefineResult>;
+  continueConversation(message: string): Promise<InstructionRefineResult>;
   cancel(): void;
 }
 

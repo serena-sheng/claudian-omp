@@ -14,7 +14,7 @@ export interface AuxiliaryRequest {
   readonly systemPrompt: string;
 }
 
-type AuxiliaryExecutionOwner = 'title' | 'inline-edit';
+type AuxiliaryExecutionOwner = 'title' | 'inline-edit' | 'instruction';
 
 export class AuxiliarySessionController {
   private abortController: AbortController | null = null;

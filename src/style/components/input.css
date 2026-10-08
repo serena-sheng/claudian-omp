@@ -41,6 +41,12 @@
   --claudian-input-wrapper-border-color: var(--background-modifier-border-hover);
 }
 
+/* Blue border while instruction mode is active */
+.claudian-input-wrapper.claudian-input-instruction-mode {
+  --claudian-input-wrapper-border-color: var(--color-blue, var(--interactive-accent));
+  --claudian-input-wrapper-box-shadow: 0 0 0 1px var(--color-blue, var(--interactive-accent));
+}
+
 /* Nav row (tab badges start, action icons end) - above input wrapper */
 .claudian-input-nav-row {
   display: flex;

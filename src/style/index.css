@@ -47,6 +47,7 @@
 
 /* Modals */
 @import url("./modals/fork-target.css");
+@import url("./modals/instruction-refine.css");
 
 /* Settings */
 @import url("./settings/base.css");

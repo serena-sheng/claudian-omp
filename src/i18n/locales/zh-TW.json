@@ -89,6 +89,25 @@
       "toolCompleted": "{tool} · 已完成",
       "toolFailed": "{tool} · 失敗",
       "toolBlocked": "{tool} · 已封鎖"
+    },
+    "instructionMode": {
+      "placeholder": "# 輸入要改寫的指令",
+      "unsupportedProvider": "目前的 provider 不支援指令模式。",
+      "initFailed": "指令改寫初始化失敗，請重試。",
+      "noResult": "未收到改寫結果。",
+      "failed": "指令改寫失敗：{error}",
+      "applied": "改寫後的 prompt 已填入輸入框。",
+      "modal": {
+        "title": "改寫指令",
+        "yourInput": "你的原始指令：",
+        "processing": "正在改寫指令…",
+        "yourResponse": "你的補充說明：",
+        "responsePlaceholder": "補充更多細節…",
+        "refinedPrompt": "改寫後的 prompt：",
+        "submit": "提交",
+        "accept": "填入輸入框",
+        "preview": "預覽"
+      }
     }
   },
   "settings": {
@@ -138,6 +157,10 @@
       "desc": "用於自動生成對話標題的模型。",
       "select": "選擇模型",
       "unavailableWarning": "自動標題已暫停。請選擇一個可用的標題模型。"
+    },
+    "instructionMode": {
+      "name": "指令模式",
+      "desc": "在空白輸入框中輸入 # 進入指令模式，將口語化的指令改寫為規範的 prompt 後再送出。"
     },
     "navMappings": {
       "name": "Vim 風格導航映射",

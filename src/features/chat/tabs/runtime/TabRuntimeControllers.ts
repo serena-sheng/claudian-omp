@@ -403,6 +403,7 @@ export function buildTabRuntimeControllers(
     getWelcomeEl: () => dom.welcomeEl,
     getMessagesEl: () => dom.messagesEl,
     getLinkedContentController: () => ui.linkedContentController,
+    getInstructionModeManager: () => ui.instructionModeManager,
     getTitleGenerationService: () => services.titleGenerationService,
     generateId: createTabMessageId,
     getSettings: () => getTabSettingsSnapshot(runtimeRef.requirePublished(), plugin),
@@ -416,6 +417,7 @@ export function buildTabRuntimeControllers(
     builtInCommands: builtInCommandController,
     captureReviewableSettlement: shell.captureReviewableSettlement ?? undefined,
   });
+  options.registerCleanup('tab instruction refine', () => inputController.cancelInstructionRefinement());
   const navigationController = new NavigationController({
     getMessagesEl: () => dom.messagesEl,
     getInputEl: () => dom.inputEl,

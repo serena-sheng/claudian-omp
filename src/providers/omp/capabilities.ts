@@ -11,5 +11,6 @@ export const OMP_PROVIDER_CAPABILITIES: Readonly<ProviderCapabilities> = Object.
   supportsProviderCommands: true,
   supportsImageAttachments: true,
   supportsTurnSteer: true,
+  supportsInstructionMode: true,
   reasoningControl: 'effort',
 });

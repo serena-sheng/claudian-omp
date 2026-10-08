@@ -9,6 +9,7 @@ import {
   sendTabInputMessageFromExplicitEnterShortcut,
 } from '@/features/chat/tabs/TabInputEvents';
 import { commitProvisionalTab } from '@/features/chat/tabs/TabLifecycle';
+import { getTabCapabilities } from '@/features/chat/tabs/tabProviderSettings';
 import type { TabControllers, TabInputBindings, TabUIComponents } from '@/features/chat/tabs/types';
 
 export function buildTabRuntimeInputBindings(
@@ -24,6 +25,20 @@ export function buildTabRuntimeInputBindings(
   const keydownHandler = (event: KeyboardEvent) => {
     if ((event.target as HTMLElement | null)?.closest?.('button, a')) return;
     const tab = runtimeRef.requirePublished();
+
+    const instructionMode = ui.instructionModeManager;
+    if (
+      !instructionMode.isActive()
+      && plugin.settings.enableInstructionMode === true
+      && getTabCapabilities(tab, plugin).supportsInstructionMode
+      && instructionMode.handleTriggerKey(event)
+    ) {
+      return;
+    }
+    if (instructionMode.handleKeydown(event)) {
+      return;
+    }
+
     if (sendTabInputMessageFromExplicitEnterShortcut(tab, event)) {
       return;
     }
@@ -60,6 +75,7 @@ export function buildTabRuntimeInputBindings(
     commitProvisionalTab(tab);
     controllers.sideChatController.handleComposerInput();
     ui.composerDropdown.handleInputChange();
+    ui.instructionModeManager.handleInputChange();
   };
   dom.inputEl.addEventListener('input', inputHandler);
   options.registerCleanup(

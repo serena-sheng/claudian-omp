@@ -89,6 +89,25 @@
       "toolCompleted": "{tool} · completado",
       "toolFailed": "{tool} · falló",
       "toolBlocked": "{tool} · bloqueado"
+    },
+    "instructionMode": {
+      "placeholder": "# Refine an instruction into a prompt",
+      "unsupportedProvider": "Instruction mode is not supported by this provider.",
+      "initFailed": "Failed to initialize instruction refinement. Please try again.",
+      "noResult": "No refined instruction received.",
+      "failed": "Failed to refine instruction: {error}",
+      "applied": "Refined prompt inserted into the composer.",
+      "modal": {
+        "title": "Refine instruction",
+        "yourInput": "Your input:",
+        "processing": "Refining your instruction...",
+        "yourResponse": "Your response:",
+        "responsePlaceholder": "Provide more details...",
+        "refinedPrompt": "Refined prompt:",
+        "submit": "Submit",
+        "accept": "Use prompt",
+        "preview": "Preview"
+      }
     }
   },
   "settings": {
@@ -138,6 +157,10 @@
       "desc": "Modelo utilizado para generar automáticamente títulos de conversación.",
       "select": "Seleccionar un modelo",
       "unavailableWarning": "La generación automática de títulos está pausada. Selecciona un modelo disponible para los títulos."
+    },
+    "instructionMode": {
+      "name": "Instruction mode",
+      "desc": "Type # in an empty composer to refine a rough instruction into a polished prompt before sending."
     },
     "navMappings": {
       "name": "Mapeos de navegación estilo Vim",

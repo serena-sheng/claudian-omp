@@ -89,6 +89,25 @@
       "toolCompleted": "{tool} · 完了",
       "toolFailed": "{tool} · 失敗",
       "toolBlocked": "{tool} · ブロック"
+    },
+    "instructionMode": {
+      "placeholder": "# Refine an instruction into a prompt",
+      "unsupportedProvider": "Instruction mode is not supported by this provider.",
+      "initFailed": "Failed to initialize instruction refinement. Please try again.",
+      "noResult": "No refined instruction received.",
+      "failed": "Failed to refine instruction: {error}",
+      "applied": "Refined prompt inserted into the composer.",
+      "modal": {
+        "title": "Refine instruction",
+        "yourInput": "Your input:",
+        "processing": "Refining your instruction...",
+        "yourResponse": "Your response:",
+        "responsePlaceholder": "Provide more details...",
+        "refinedPrompt": "Refined prompt:",
+        "submit": "Submit",
+        "accept": "Use prompt",
+        "preview": "Preview"
+      }
     }
   },
   "settings": {
@@ -138,6 +157,10 @@
       "desc": "会話タイトルを自動生成するために使用されるモデル。",
       "select": "モデルを選択",
       "unavailableWarning": "タイトルの自動生成は一時停止中です。利用可能なタイトル用モデルを選択してください。"
+    },
+    "instructionMode": {
+      "name": "Instruction mode",
+      "desc": "Type # in an empty composer to refine a rough instruction into a polished prompt before sending."
     },
     "navMappings": {
       "name": "Vimスタイルナビゲーションマッピング",
