@@ -15,6 +15,8 @@ Both upstream projects are MIT licensed; see NOTICE.md and LICENSE.
 
 ![Zen mode with an expanded chat](assets/zen-mode-expanded.png)
 
+![The Super Useful Claudian chat sidebar alongside the main note, with provider readiness](assets/super-useful-claudian-panel.png)
+
 ## Requirements
 
 - Obsidian v1.13.0+
